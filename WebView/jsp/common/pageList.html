@@ -1,0 +1,28 @@
+<ul class="pagination justify-content-end" id="page-control">
+    <li class="page-item" v-if="currentPage != 1">
+        <a class="btn btn-outline-secondary" href="#"> ${ "<<" } </a> </li> <li class="page-item"
+                v-if="currentPage != 1">
+                <a class="btn btn-outline-secondary" href="#"> </a>
+    </li>
+    <s:iterator begin="pageVo.currentPage -2 < 0 ? 1 : (pageVo.currentPage -1) "
+        end="pageVo.currentPage +2 > pageVo.pageCounts ? pageVo.pageCounts : (pageVo.currentPage +2)" var="page"
+        status="status">
+        <li class="page-item active">
+            <a class='btn btn-outline-secondary ${ pageVo.currentPage == page ? "disabled" : "" }' href="#">
+                <s:property value="#page" />
+            </a>
+        </li>
+    </s:iterator>
+    <li class="page-item">
+        <a class="btn btn-outline-secondary" href="#"> ${ ">" } </a>
+    </li>
+    <li class="page-item">
+        <a class="btn btn-outline-secondary" href="#"> ${ ">>" } </a>
+    </li>
+</ul>
+<script type="text/javascript">
+    var pageApp = new Vue({
+        el: '#page-control',
+        data: JSON.parse(`${pageVo.object}`),
+    })
+</script>

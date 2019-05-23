@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+
+	<definition name="noLayout" template="/jsp/layout/noLayout.jsp">
+		<put-attribute name="title" value="AttackMusic" />
+		<put-attribute name="lib" value="/jsp/head/lib.jsp" />
+	</definition>
+
+	<definition name="baseLayout" template="/jsp/layout/layout.jsp">
+		<put-attribute name="title" value="AttackMusic" />
+		<put-attribute name="lib" value="" />
+		<put-attribute name="menu" value="" />
+		<put-attribute name="sidebar" value="" />
+		<put-attribute name="breadcrumb" value="" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="aside-menu" value="" />
+		<put-attribute name="footer" value="" />
+	</definition>
+	
+	<definition name="LayoutView" extends="baseLayout">
+		<put-attribute name="lib" value="/jsp/head/lib.jsp" />
+		<put-attribute name="menu" value="/jsp/head/menu.jsp" />
+		<put-attribute name="sidebar" value="/jsp/head/sidebar.jsp" />
+		<put-attribute name="breadcrumb" value="/jsp/head/breadcrumb.jsp" />
+		<put-attribute name="aside-menu" value="/jsp/head/asideMenu.jsp" />
+		<put-attribute name="footer" value="/jsp/footer/footer.jsp" />
+	</definition>
+	
+</tiles-definitions>
