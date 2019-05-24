@@ -7,11 +7,24 @@
 		<li class="page-item">
 			<a class="btn btn-outline-secondary" :class="{disabled:(currentPage == 1 || currentPage > pageCounts)}" @click="prevPage()"> ${ "<<" } </a>
 		</li>
+		<li class="page-item" v-if="pageArray[0] != 1">
+			<a class='btn btn-outline-secondary' v-text="1" @click="goPage(1)"> </a>
+		</li>
+		<li class="page-item" v-if="pageArray[0] > 2">
+			<a class='btn btn-outline-secondary disabled'> ... </a>
+		</li>
 		<li class="page-item" v-for="(v, i) in pageArray" :key="i">
 			<a class='btn btn-outline-secondary' :class="{disabled: currentPage==v}" v-text="v" @click="goPage(v)"> </a>
 		</li>
+		<li class="page-item" v-if="pageArray[pageArray.length-1] + 1 < pageCounts">
+			<a class='btn btn-outline-secondary disabled'> ... </a>
+		</li>
+		<li class="page-item" v-if="pageArray[pageArray.length-1] != pageCounts">
+			<a class='btn btn-outline-secondary' v-text="pageCounts" @click="goPage(pageCounts)"> </a>
+		</li>
 		<li class="page-item">
-			<a class="btn btn-outline-secondary" :class="{disabled:(currentPage == pageCounts && currentPage > pageCounts)}" @click="nextPage()"> ${ ">>" } </a>
+			<a class="btn btn-outline-secondary" :class="{disabled:(currentPage == pageCounts)}" @click="nextPage()"> ${ ">>" }
+			</a>
 		</li>
 	</ul>
 	<script type="text/javascript">
@@ -27,8 +40,11 @@
 							for (var i = 1, j = 0; i <= this.pageCounts; i++) {
 								result[j] = ++j;
 							}
+							var range = [0, 0];
+							range[0] = vm.currentPage - 3 < 1 ? 1 : (vm.currentPage - 3)
+							range[1] = range[0] + 5 > vm.pageCounts ? vm.pageCounts : (range[0] + 5) ;
 							result = $.map(result, function(val, key) {
-								if (val < vm.currentPage + 3  && val > vm.currentPage - 3 ){
+								if (val <= range[1]  && val >= range[0] ){
 									return val  ;
 								}
 							})

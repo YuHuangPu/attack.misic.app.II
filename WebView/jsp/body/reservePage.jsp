@@ -60,6 +60,9 @@
 							<thead>
 								<tr>
 									<th>
+										<s:property value="lgView.getId('004')" />
+									</th>
+									<th>
 										<s:property value="lgView.getId('005')" />
 									</th>
 									<th>
@@ -124,184 +127,192 @@
 
 
 	</div>
+	<div id="modal-control">
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="ModalLabel">
+							<s:property value="lgView.getId('029')+ lgView.getId('035')" />
+						</h5>
+					</div>
+					<form id="addForm" class="mb-0">
+						<div class="modal-body">
+							<div class=" rounded border border-light pr-2 pl-2">
+								<div class="form-group row">
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('005')" />
+										</label>
+										<input class="form-control" type="text" placeholder="0">
+									</div>
+									<div class="col-md-5">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('006')" />
+										</label>
+										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
+									</div>
+									<div class="col-md-4">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('002')" />
+										</label>
+										<select v-model="addModal.data.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
+											<option value="" v-for="(v, i) in factorysList" :key="i" v-text="v.label" :value="v.val"></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row mb-2">
 
-	<div class="modal fade" id="listModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="ModalLabel">
-						<s:property value="lgView.getId('035')" />
-					</h5>
-					<button class="btn btn-outline-primary" type="button" id="addList">
-						<s:property value="lgView.getId('029')" />
-					</button>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<form id="reserveListForm">
-					<div class="modal-body">
-						<div class="form-group row">
-							<div class="col-md-7">
-								<label class="col-form-label">
-									<s:property value="lgView.getId('002')" />
-								</label>
-								<select class="form-control selectpicker show-tick" data-live-search="true" data-size="5" required>
-									<s:iterator value="#attr.factorys" var="f" status="status">
-										<option value="<s:property value='#f.get("Value")' />"><s:property value='#f.get("Text")' /></option>
-									</s:iterator>
-								</select>
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('013')" />
+										</label>
+										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />">
+									</div>
+									<div class="col-md-2">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('015')" />
+										</label>
+										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />">
+									</div>
+									<div class="col-md-2">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('016')" />
+										</label>
+										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
+									</div>
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('010')" />
+										</label>
+										<textarea class="form-control" type="text" placeholder="<s:property value="lgView.getId('010')" />" rows="1"></textarea>
+									</div>
+									<div class="col-md-2">
+										<div class="btn-group  w-100 h-100" role="group">
+											<button class="btn btn-outline-secondary h-100" type="button">
+												<i class="fa fa-plus fa-lg"></i>
+											</button>
+											<button class="btn btn-outline-secondary h-100" type="button">
+												<i class="fa fa-minus fa-lg"></i>
+											</button>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="col-md-5">
-								<div class=" rounded border border-info">
-									<div class="col-md-12 row">
+						</div>
+						<div class="modal-footer">
+							<div class="container">
+								<div class="row">
+									<div class="col-6 justify-content-start">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('024') + ' :'" />
-										</label>
-										<p class="col-form-label">9999999</p>
-									</div>
-									<div class="col-md-12 row">
-										<label class="col-form-label">
+											9999999
+
 											<s:property value="lgView.getId('043') + ' :'" />
+											99999
 										</label>
-										<p class="col-form-label">9999999</p>
+									</div>
+									<div class="col-6 justify-content-end">
+										<div class="float-right">
+											<button class="btn btn-secondary" type="button" data-dismiss="modal">
+												<s:property value="lgView.getId('028')" />
+											</button>
+											<button class="btn btn-primary text-white">
+												<s:property value="lgView.getId('031')" />
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="form-group row">
-							<div class="col-md-2">
-								<label class="col-form-label">
-									<s:property value="lgView.getId('005')" />
-								</label>
-								<input class="form-control" type="text" placeholder="0">
-							</div>
-							<div class="col-md-2">
-								<label class="col-form-label">
+
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="ModalLabel">
+							<s:property value="lgView.getId('004')+ lgView.getId('013')" />
+							{{ '- ' + editModal.data.Id }}
+						</h5>
+					</div>
+					<form id="editForm">
+						<div class="modal-body ">
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">
 									<s:property value="lgView.getId('006')" />
 								</label>
-								<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
+								<div class="col-sm-9">
+									<input v-model="editModal.data.Name" class="form-control" type="text"
+										placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />" required>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<label class="col-form-label">
-									<s:property value="lgView.getId('013')" />
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">
+									<s:property value="lgView.getId('002')" />
 								</label>
-								<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />">
+								<div class="col-sm-9">
+									<select v-model="editModal.data.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
+										<option value="" v-for="(v, i) in factorysList" :key="i" v-text="v.label" :value="v.val"></option>
+									</select>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<label class="col-form-label">
-									<s:property value="lgView.getId('015')" />
-								</label>
-								<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />">
+							<div class="form-group">
+								<div class="form-row">
+									<div class="col-md-4">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('013')" />
+										</label>
+										<div>
+											<input v-model="editModal.data.Reserve" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('015')" />
+										</label>
+										<div>
+											<input v-model="editModal.data.Cost" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('016')" />
+										</label>
+										<div>
+											<input v-model="editModal.data.Price" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
+										</div>
+									</div>
+								</div>
 							</div>
-							<div class="col-md-2">
-								<label class="col-form-label">
-									<s:property value="lgView.getId('016')" />
-								</label>
-								<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
-							</div>
-							<div class="col-md-2">
-								<label class="col-form-label">
+							<div class="form-group">
+								<label>
 									<s:property value="lgView.getId('010')" />
 								</label>
-								<textarea class="form-control" type="text" placeholder="<s:property value="lgView.getId('010')" />" rows="1"></textarea>
+								<textarea v-model="editModal.data.Remark" class="form-control" placeholder=""></textarea>
 							</div>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-secondary" type="button" data-dismiss="modal">
-							<s:property value="lgView.getId('028')" />
-						</button>
-						<button class="btn btn-primary text-white">
-							<s:property value="lgView.getId('031')" />
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>l
-
-	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="ModalLabel">aa</h5>
-					<button class="btn btn-outline-danger ">
-						<s:property value="lgView.getId('045')" />
-					</button>
+						<div class="modal-footer">
+							<button class="btn btn-secondary " type="button" data-dismiss="modal">
+								<s:property value="lgView.getId('028')" />
+							</button>
+							<button class="btn btn-primary text-white ">
+								<s:property value="lgView.getId('031')" />
+							</button>
+						</div>
+					</form>
 				</div>
-				<form id="editGoodsForm">
-					<div class="modal-body ">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">
-								<s:property value="lgView.getId('006')" />
-							</label>
-							<div class="col-sm-9">
-								<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />"
-									required>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">
-								<s:property value="lgView.getId('002')" />
-							</label>
-							<div class="col-sm-9">
-								<select class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
-									<s:iterator value="#attr.factorys" var="f" status="status">
-										<option value="<s:property value='#f.get("Value")' />"><s:property value='#f.get("Text")' /></option>
-									</s:iterator>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-row">
-								<div class="col-md-4">
-									<label class="col-form-label">
-										<s:property value="lgView.getId('013')" />
-									</label>
-									<div>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="col-form-label">
-										<s:property value="lgView.getId('015')" />
-									</label>
-									<div>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="col-form-label">
-										<s:property value="lgView.getId('016')" />
-									</label>
-									<div>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label>
-								<s:property value="lgView.getId('010')" />
-							</label>
-							<textarea class="form-control" placeholder=""></textarea>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-secondary " type="button" data-dismiss="modal">
-							<s:property value="lgView.getId('028')" />
-						</button>
-						<button class="btn btn-primary text-white ">
-							<s:property value="lgView.getId('031')" />
-						</button>
-					</div>
-				</form>
 			</div>
 		</div>
+
 	</div>
-
-
 </body>
 
 <script type="text/javascript">
@@ -329,10 +340,16 @@
 		methods : {
 			add : function(e) {
 				modalControl.addModal.data = {
-					Id : '',
+					Reserve : '',
+					Purchase : '',
+					Factory : '',
+					Cost : '',
 					Name : '',
 					Remark : '',
-					Mobile : '',
+					Item : '',
+					Sell : '',
+					Price : '',
+					Id : ''
 				}
 				$('#addModal').modal('toggle')
 			},
@@ -386,7 +403,7 @@
 		el : '#data-control',
 		name : 'DataControl',
 		data : {
-			list : ${ request.dataList },
+			list : JSON.parse(`${ request.dataList }`),
 		},
 		computed : {
 			showData : function() {
@@ -438,6 +455,7 @@
 		el : '#modal-control',
 		name : 'ModalControl',
 		data : {
+			factorys : JSON.parse(`${ request.factorys }`),
 			editModal : {
 				data : {},
 			},
@@ -450,7 +468,17 @@
 				},
 			}
 		},
-		computed : {},
+		computed : {
+			factorysList : function() {
+				var tmp = $.map(this.factorys, function(v, key) {
+					return {
+						label : v.Id + ' - ' + v.Name,
+						val : v.Id,
+					}
+				})
+				return tmp;
+			}
+		},
 		mounted : function() {
 		},
 		methods : {

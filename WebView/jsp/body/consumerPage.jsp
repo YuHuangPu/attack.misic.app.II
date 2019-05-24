@@ -51,7 +51,7 @@
 				</div>
 				<div class="card-header">
 					<i class="fa fa-handshake-o"></i>
-					<s:property value="lgView.getId('002')+lgView.getId('003')" />
+					<s:property value="lgView.getId('036')+lgView.getId('003')" />
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

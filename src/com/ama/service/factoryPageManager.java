@@ -43,7 +43,7 @@ public class factoryPageManager extends com.ama.common.BaseManager{
 			Views maxUpdate = new Views(this.getConn(), Keys.View.FactoryMaxUpdate);
 			JSONArray mUpdate = maxUpdate.getDatalistJSONArray(Boolean.FALSE);
 			
-			request.setAttribute("fInfo", fInfo);
+			request.setAttribute("fInfo", fInfo.toString().replace("\"", "\\\"").replace("'", "\\'"));
 			request.setAttribute("MaxUpdate", mUpdate.getJSONObject(0).getString("MaxUpdate"));
 			
 			

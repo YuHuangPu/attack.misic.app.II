@@ -36,7 +36,12 @@ public class SqlFactory {
 	}
 
 	public static String getReserveInfo(String whereCondition) {
-		SQL = new StringBuffer("SELECT * ");
+		SQL = new StringBuffer("SELECT G.ITEM, G.ID, G.NAME, G.STATUS, G.RESERVE, G.PURCHASE, G.SELL, G.COST, G.PRICE, G.REMARK, G.FACTORY");
+		SQL.append(", (SELECT F.NAME FROM FACTORY F WHERE F.ID = G.FACTORY) AS \"FACTORY_NAME\"");
+		SQL.append(", (SELECT A.ACCOUNT FROM ACCOUNT A WHERE A.ID = G.CREATE_WHO) AS \"CREATE_WHO\"");
+		SQL.append(", (SELECT A.ACCOUNT FROM ACCOUNT A WHERE A.ID = G.UPDATE_WHO) AS \"UPDATE_WHO\"");
+		SQL.append(", DATE_FORMAT(G.UPDATE_DATE,'%Y-%m-%d %T') as \"Update_DATE\"");
+		SQL.append(", DATE_FORMAT(G.CREATE_DATE,'%Y-%m-%d') as \"Create_Date\" ");
 		SQL.append(" FROM GOODS G ");
 		SQL.append(" WHERE 1=1");
 		SQL.append(StringUtil.eliminateNull(whereCondition));

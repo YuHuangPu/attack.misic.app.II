@@ -46,7 +46,7 @@ public class consumerPageManager extends com.ama.common.BaseManager{
 			JSONArray mUpdate = maxUpdate.getDatalistJSONArray(Boolean.FALSE);
 			
 			request = (HttpServletRequest) ServletActionContext.getRequest();
-			request.setAttribute("consumers", consumers);
+			request.setAttribute("consumers", consumers.toString().replace("\"", "\\\"").replace("'", "\\'"));
 			request.setAttribute("MaxUpdate", mUpdate.getJSONObject(0).getString("MaxUpdate"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -56,8 +56,9 @@
 					<table class="table table-responsive-sm table-striped">
 						<thead>
 							<tr>
+
 								<th>
-									<input class="" id="inline-checkbox2" type="checkbox" value="check2">
+									<s:property value="lgView.getId('004')" />
 								</th>
 								<th>
 									<s:property value="lgView.getId('005')" />
