@@ -153,6 +153,13 @@
 										<input v-model="dv.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
 									</div>
 									<div class="col-md-4">
+									
+								<button class="close" type="button">
+									<span aria-hidden="true">×</span>
+								</button>
+								<button class="close" type="button">
+									<span aria-hidden="true">+</span>
+								</button>
 										<label class="col-form-label">
 											<s:property value="lgView.getId('002')" />
 										</label>
@@ -181,21 +188,11 @@
 										</label>
 										<input v-model="dv.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-5">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('010')" />
 										</label>
 										<textarea v-model="dv.Remark" class="form-control" type="text" placeholder="<s:property value="lgView.getId('010')" />" rows="1"></textarea>
-									</div>
-									<div class="col-md-2">
-										<div class="btn-group" role="group">
-											<button class="btn btn-outline-secondary" type="button">
-												<i class="fa fa-plus fa-lg"></i>
-											</button>
-											<button class="btn btn-outline-secondary" type="button">
-												<i class="fa fa-minus fa-lg"></i>
-											</button>
-										</div>
 									</div>
 								</div>
 							</div>
