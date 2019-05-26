@@ -126,7 +126,7 @@
 							<span aria-hidden="true">×</span>
 						</button>
 					</div>
-					<form id="addForm" @submit="addModalSubmit">
+					<form id="addForm" @submit="addModalSubmit" class="mb-0">
 						<div class="modal-body">
 							<div class="form-group">
 								<div class="form-row">
@@ -201,7 +201,7 @@
 							<span aria-hidden="true">×</span>
 						</button>
 					</div>
-					<form id="editForm" @submit="editModalSubmit">
+					<form id="editForm" @submit="editModalSubmit" class="mb-0">
 						<div class="modal-body">
 							<div class="form-group">
 								<div class="form-row">

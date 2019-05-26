@@ -131,7 +131,7 @@
 						</button>
 					</div>
 					<div class="modal-body ">
-						<form id="addForm" @submit="addModalSubmit">
+						<form id="addForm" @submit="addModalSubmit" class="mb-0">
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">
 									<s:property value="lgView.getId('005')" />
@@ -190,7 +190,7 @@
 						</button>
 					</div>
 					<div class="modal-body ">
-						<form id="editForm" @submit="editModalSubmit">
+						<form id="editForm" @submit="editModalSubmit" class="mb-0">
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">
 									<s:property value="lgView.getId('005')" />

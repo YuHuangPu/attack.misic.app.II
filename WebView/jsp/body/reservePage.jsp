@@ -138,25 +138,25 @@
 					</div>
 					<form id="addForm" class="mb-0">
 						<div class="modal-body">
-							<div class=" rounded border border-light pr-2 pl-2">
+							<div class="rounded border border-light pr-2 pl-2" v-for="(dv, di) in addModal.dataList" :key="di">
 								<div class="form-group row">
 									<div class="col-md-3">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('005')" />
 										</label>
-										<input class="form-control" type="text" placeholder="0">
+										<input v-model="dv.Id" class="form-control" type="text" placeholder="0">
 									</div>
 									<div class="col-md-5">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('006')" />
 										</label>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
+										<input v-model="dv.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
 									</div>
 									<div class="col-md-4">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('002')" />
 										</label>
-										<select v-model="addModal.data.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
+										<select v-model="dv.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
 											<option value="" v-for="(v, i) in factorysList" :key="i" v-text="v.label" :value="v.val"></option>
 										</select>
 									</div>
@@ -167,32 +167,32 @@
 										<label class="col-form-label">
 											<s:property value="lgView.getId('013')" />
 										</label>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />">
+										<input v-model="dv.Reserve" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />">
 									</div>
 									<div class="col-md-2">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('015')" />
 										</label>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />">
+										<input v-model="dv.Cost" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />">
 									</div>
 									<div class="col-md-2">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('016')" />
 										</label>
-										<input class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
+										<input v-model="dv.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
 									</div>
 									<div class="col-md-3">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('010')" />
 										</label>
-										<textarea class="form-control" type="text" placeholder="<s:property value="lgView.getId('010')" />" rows="1"></textarea>
+										<textarea v-model="dv.Remark" class="form-control" type="text" placeholder="<s:property value="lgView.getId('010')" />" rows="1"></textarea>
 									</div>
 									<div class="col-md-2">
-										<div class="btn-group  w-100 h-100" role="group">
-											<button class="btn btn-outline-secondary h-100" type="button">
+										<div class="btn-group" role="group">
+											<button class="btn btn-outline-secondary" type="button">
 												<i class="fa fa-plus fa-lg"></i>
 											</button>
-											<button class="btn btn-outline-secondary h-100" type="button">
+											<button class="btn btn-outline-secondary" type="button">
 												<i class="fa fa-minus fa-lg"></i>
 											</button>
 										</div>
@@ -206,10 +206,9 @@
 									<div class="col-6 justify-content-start">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('024') + ' :'" />
-											9999999
-
+											{{ totalCost }}
 											<s:property value="lgView.getId('043') + ' :'" />
-											99999
+											{{ totalPrice }}
 										</label>
 									</div>
 									<div class="col-6 justify-content-end">
@@ -240,15 +239,15 @@
 							{{ '- ' + editModal.data.Id }}
 						</h5>
 					</div>
-					<form id="editForm">
+					<form id="editForm" class="mb-0">
 						<div class="modal-body ">
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">
 									<s:property value="lgView.getId('006')" />
 								</label>
 								<div class="col-sm-9">
-									<input v-model="editModal.data.Name" class="form-control" type="text"
-										placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />" required>
+									<input v-model="editModal.data.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />"
+										required>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -268,8 +267,7 @@
 											<s:property value="lgView.getId('013')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Reserve" class="form-control" type="text"
-												placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
+											<input v-model="editModal.data.Reserve" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -277,8 +275,7 @@
 											<s:property value="lgView.getId('015')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Cost" class="form-control" type="text"
-												placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
+											<input v-model="editModal.data.Cost" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -286,8 +283,7 @@
 											<s:property value="lgView.getId('016')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Price" class="form-control" type="text"
-												placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
+											<input v-model="editModal.data.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
 										</div>
 									</div>
 								</div>
@@ -331,7 +327,8 @@
 				var dataC = dataControl;
 				pageC.currentPage = 1;
 				pageC.totalRecord = dataC.showData.length;
-				pageC.pageCounts = Math.ceil((pageC.totalRecord / pageC.showRecord));
+				pageC.pageCounts = Math
+						.ceil((pageC.totalRecord / pageC.showRecord));
 			}
 		},
 		mounted : function() {
@@ -339,18 +336,15 @@
 		},
 		methods : {
 			add : function(e) {
-				modalControl.addModal.data = {
-					Reserve : '',
-					Purchase : '',
+				modalControl.addModal.dataList = [ {
+					Reserve : 0,
 					Factory : '',
-					Cost : '',
+					Cost : 0,
 					Name : '',
 					Remark : '',
-					Item : '',
-					Sell : '',
-					Price : '',
+					Price : 0,
 					Id : ''
-				}
+				} ]
 				$('#addModal').modal('toggle')
 			},
 			edit : function(e) {
@@ -411,7 +405,8 @@
 				var toolC = toolControl;
 				var tmp = this.list;
 				tmp = $.map(tmp, function(val, key) {
-					var ma = new RegExp(".*" + toolC.superSearchInput + ".*", "i");
+					var ma = new RegExp(".*" + toolC.superSearchInput + ".*",
+							"i");
 					if (ma.test(JSON.stringify(val)))
 						return val
 				})
@@ -460,12 +455,7 @@
 				data : {},
 			},
 			addModal : {
-				data : {
-					Id : '',
-					Name : '',
-					Remark : '',
-					Mobile : '',
-				},
+				dataList : [ {} ],
 			}
 		},
 		computed : {
@@ -475,6 +465,20 @@
 						label : v.Id + ' - ' + v.Name,
 						val : v.Id,
 					}
+				})
+				return tmp;
+			}, 
+			totalPrice : function(){
+				var tmp = 0;
+				$.each(this.addModal.dataList, function(idx, val){
+					tmp += val.Price;
+				})
+				return tmp;
+			}, 
+			totalCost : function(){
+				var tmp = 0;
+				$.each(this.addModal.dataList, function(idx, val){
+					tmp += parseFloat(val.Cost);
 				})
 				return tmp;
 			}
