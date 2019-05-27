@@ -7,7 +7,7 @@
 		<li class="page-item">
 			<a class="btn btn-outline-secondary" :class="{disabled:(currentPage == 1 || currentPage > pageCounts)}" @click="prevPage()"> ${ "<<" } </a>
 		</li>
-		<li class="page-item" v-if="pageArray[0] != 1">
+		<li class="page-item" v-if="pageArray[0] != 1 && pageCounts > 0">
 			<a class='btn btn-outline-secondary' v-text="1" @click="goPage(1)"> </a>
 		</li>
 		<li class="page-item" v-if="pageArray[0] > 2">
@@ -19,7 +19,7 @@
 		<li class="page-item" v-if="pageArray[pageArray.length-1] + 1 < pageCounts">
 			<a class='btn btn-outline-secondary disabled'> ... </a>
 		</li>
-		<li class="page-item" v-if="pageArray[pageArray.length-1] != pageCounts">
+		<li class="page-item" v-if="pageArray[pageArray.length-1] != pageCounts && pageCounts > 0">
 			<a class='btn btn-outline-secondary' v-text="pageCounts" @click="goPage(pageCounts)"> </a>
 		</li>
 		<li class="page-item">

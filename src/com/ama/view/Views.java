@@ -63,7 +63,7 @@ public class Views {
 		}
 	}
 	
-	public void setPstmt(Object... objects) throws SQLException{
+	public void setPstmt(Object [] objects) throws SQLException{
 		for(int i = 1; i<= objects.length ; i ++){
 			if(StringUtil.isNull(objects[i - 1])){
 				pstmt.setNull(i, Types.NULL);

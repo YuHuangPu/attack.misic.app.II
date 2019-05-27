@@ -1,7 +1,9 @@
 package com.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DatesUtil{
@@ -34,34 +36,39 @@ public class DatesUtil{
 	 * HH:mm:ss
 	 */
 	public static SimpleDateFormat TimeFormat24 = new SimpleDateFormat("HH:mm:ss");
-	/**
-	 * must be this 106/07/07
-	 * @throws ParseException 
-	 * */
-	public static Date TWDtoAD(String s) throws ParseException{
-		if(StringUtil.isNull(s)){
-			return null;
-		}
-		String result = regulateString(s);
-		result = (Integer.valueOf(result.split("-")[0])+TransYear) + result.replace(result.split("-")[0], "");
-		return DateFormat.parse(result);
-	}
-	
-	
 	
 	public static String [] DateFormatStrings = {"yyyy-MM-dd HH-mm-ss","yyyy-MM-dd HH-mm","yyyy-MM-dd HH","yyyy-MM-dd","yyyy-MM","yyyy"};
 
-	
+	public static Timestamp getFirstDayByMonth(Date t) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(t);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.AM_PM, 0);
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return new Timestamp(c.getTime().getTime());
+	}
+	public static Timestamp getLastDayByMonth(Date t) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(t);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.AM_PM, 0);
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		c.add(Calendar.MONTH, +1);
+		c.add(Calendar.MILLISECOND, -1);
+		return new Timestamp(c.getTime().getTime());
+	}
 	public static Date getValue(Object d) throws ParseException{
 		return StringUtil.isNull(d)?null:DateTimeFormat.parse(d.toString());
 	}
 	public static Date getValue(Object d,SimpleDateFormat format) throws ParseException{
 		return StringUtil.isNull(d)?null:format.parse(d.toString());
 	}
-//	public static String getValue(String d,SimpleDateFormat format) throws Exception{
-//		return StringsUtil.isNull(d)?null
-//				:format.format(StringToTimestamp(d.toString()));
-//	}
 	public static java.sql.Timestamp StringToTimestamp(String s, SimpleDateFormat df) throws ParseException{
 		return new java.sql.Timestamp(df.parse(s).getTime());
 	}

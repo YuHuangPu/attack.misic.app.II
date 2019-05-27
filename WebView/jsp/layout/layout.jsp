@@ -61,7 +61,7 @@
 			</div>
 		</div>
 		</main>
-		<tiles:insertAttribute name="aside-menu" />
+<%-- 		<tiles:insertAttribute name="aside-menu" /> --%>
 	</div>
 	<tiles:insertAttribute name="footer" />
 </body>

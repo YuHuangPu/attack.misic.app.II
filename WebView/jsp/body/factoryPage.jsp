@@ -78,12 +78,12 @@
 								<th>
 									<s:property value="lgView.getId('010')" />
 								</th>
-								<th>
-									<s:property value="lgView.getId('011')" />
-								</th>
-								<th>
-									<s:property value="lgView.getId('012')" />
-								</th>
+<!-- 								<th> -->
+<%-- 									<s:property value="lgView.getId('011')" /> --%>
+<!-- 								</th> -->
+<!-- 								<th> -->
+<%-- 									<s:property value="lgView.getId('012')" /> --%>
+<!-- 								</th> -->
 							</tr>
 						</thead>
 						<tbody id="data-control">
@@ -99,8 +99,8 @@
 								<td>{{ val.Address }}</td>
 								<td>{{ val.Mobile }}</td>
 								<td>{{ val.Remark }}</td>
-								<td>{{ val.UpdateWho }}</td>
-								<td>{{ val.UpdateDate }}</td>
+<!-- 								<td>{{ val.UpdateWho }}</td> -->
+<!-- 								<td>{{ val.UpdateDate }}</td> -->
 							</tr>
 						</tbody>
 					</table>

@@ -36,8 +36,8 @@ public class SqlFactory {
 	}
 
 	public static String getReserveInfo(String whereCondition) {
-		SQL = new StringBuffer("SELECT G.ITEM, G.ID, G.NAME, G.STATUS, G.RESERVE, G.PURCHASE, G.SELL, G.COST, G.PRICE, G.REMARK, G.FACTORY");
-		SQL.append(", (SELECT F.NAME FROM FACTORY F WHERE F.ID = G.FACTORY) AS \"FACTORY_NAME\"");
+		SQL = new StringBuffer("SELECT G.ITEM, G.ID, G.NAME, G.STATUS, G.RESERVE, G.PURCHASE, G.SELL, G.COST, G.PRICE, G.REMARK, G.FACTORY_ID");
+		SQL.append(", (SELECT F.NAME FROM FACTORY F WHERE F.ID = G.FACTORY_ID) AS \"FACTORY_NAME\"");
 		SQL.append(", (SELECT A.ACCOUNT FROM ACCOUNT A WHERE A.ID = G.CREATE_WHO) AS \"CREATE_WHO\"");
 		SQL.append(", (SELECT A.ACCOUNT FROM ACCOUNT A WHERE A.ID = G.UPDATE_WHO) AS \"UPDATE_WHO\"");
 		SQL.append(", DATE_FORMAT(G.UPDATE_DATE,'%Y-%m-%d %T') as \"Update_DATE\"");
@@ -46,6 +46,17 @@ public class SqlFactory {
 		SQL.append(" WHERE 1=1");
 		SQL.append(StringUtil.eliminateNull(whereCondition));
 		SQL.append(" ORDER BY G.ITEM");
+		return SQL.toString();
+	}
+
+	public static String getGoodsDetailInfo(String whereCondition) {
+		SQL = new StringBuffer("SELECT G.ITEM, G.GOODS_ID, G.CONSUMER_ID, G.STATUS, G.AMOUNT, G.PRICE, G.SELL_DATE, G.REMARK, G.CREATE_DATE, G.CREATE_WHO");
+		SQL.append(", (SELECT G1.NAME FROM GOODS G1 WHERE G1.ID = G.GOODS_ID) AS \"GOODS_NAME\"");
+		SQL.append(", IF(G.STATUS='I', '¶i³f', '¾P°â') AS \"STATUS_TEXT\"");
+		SQL.append(", (SELECT C.NAME FROM CONSUMER C WHERE C.ID = G.CONSUMER_ID) AS \"CONSUMER_NAME\"");
+		SQL.append(" FROM GOODS_DETAIL G WHERE 1=1 ");
+		SQL.append(StringUtil.eliminateNull(whereCondition));
+		SQL.append(" ORDER BY G.SELL_DATE DESC");
 		return SQL.toString();
 	}
 

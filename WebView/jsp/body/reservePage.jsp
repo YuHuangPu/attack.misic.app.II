@@ -86,12 +86,12 @@
 									<th>
 										<s:property value="lgView.getId('010')" />
 									</th>
-									<th>
-										<s:property value="lgView.getId('017')" />
-									</th>
-									<th>
-										<s:property value="lgView.getId('012')" />
-									</th>
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('017')" /> --%>
+<!-- 									</th> -->
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('012')" /> --%>
+<!-- 									</th> -->
 								</tr>
 							</thead>
 							<tbody id="data-control">
@@ -109,8 +109,8 @@
 									<td>{{ val.Price }}</td>
 									<td>{{ val.FactoryName }}</td>
 									<td>{{ val.Remark }}</td>
-									<td>{{ val.CreateWho }}</td>
-									<td>{{ val.UpdateDate }}</td>
+<!-- 									<td>{{ val.CreateWho }}</td> -->
+<!-- 									<td>{{ val.UpdateDate }}</td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -136,7 +136,7 @@
 							<s:property value="lgView.getId('029')+ lgView.getId('035')" />
 						</h5>
 					</div>
-					<form id="addForm" class="mb-0">
+					<form id="addForm" class="mb-0" @submit="addModalSubmit">
 						<div class="modal-body">
 							<div class="rounded border border-light pr-2 pl-2" v-for="(dv, di) in addModal.dataList" :key="di">
 								<div class="form-group row">
@@ -150,20 +150,20 @@
 										<label class="col-form-label">
 											<s:property value="lgView.getId('006')" />
 										</label>
-										<input v-model="dv.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />" required>
+										<input v-model="dv.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('006')" />"
+											required>
 									</div>
 									<div class="col-md-4">
-									
-								<button class="close" type="button">
-									<span aria-hidden="true">×</span>
-								</button>
-								<button class="close" type="button">
-									<span aria-hidden="true">+</span>
-								</button>
+										<button class="close close-danger" type="button" v-if="addModal.dataList.length > 1" @click="addModalDelData(di)">
+											<span aria-hidden="true">×</span>
+										</button>
+										<button class="close close-primary" type="button" @click="addModalAddData(di)">
+											<span aria-hidden="true">+</span>
+										</button>
 										<label class="col-form-label">
 											<s:property value="lgView.getId('002')" />
 										</label>
-										<select v-model="dv.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
+										<select v-model="dv.FactoryId" class="form-control selectpicker show-tick" data-style="btn-outline-dark text-body"  data-live-search="true" data-size="5" required>
 											<option value="" v-for="(v, i) in factorysList" :key="i" v-text="v.label" :value="v.val"></option>
 										</select>
 									</div>
@@ -174,19 +174,22 @@
 										<label class="col-form-label">
 											<s:property value="lgView.getId('013')" />
 										</label>
-										<input v-model="dv.Reserve" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />">
+										<input v-model="dv.Reserve" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />"
+											required>
 									</div>
 									<div class="col-md-2">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('015')" />
 										</label>
-										<input v-model="dv.Cost" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />">
+										<input v-model="dv.Cost" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('015')" />"
+											required>
 									</div>
 									<div class="col-md-2">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('016')" />
 										</label>
-										<input v-model="dv.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />">
+										<input v-model="dv.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('016')" />"
+											required>
 									</div>
 									<div class="col-md-5">
 										<label class="col-form-label">
@@ -203,9 +206,9 @@
 									<div class="col-6 justify-content-start">
 										<label class="col-form-label">
 											<s:property value="lgView.getId('024') + ' :'" />
-											{{ totalCost }}
+											{{ totalReserve }}
 											<s:property value="lgView.getId('043') + ' :'" />
-											{{ totalPrice }}
+											{{ totalCost }}
 										</label>
 									</div>
 									<div class="col-6 justify-content-end">
@@ -236,15 +239,15 @@
 							{{ '- ' + editModal.data.Id }}
 						</h5>
 					</div>
-					<form id="editForm" class="mb-0">
+					<form id="editForm" class="mb-0" @submit="editModalSubmit">
 						<div class="modal-body ">
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">
 									<s:property value="lgView.getId('006')" />
 								</label>
 								<div class="col-sm-9">
-									<input v-model="editModal.data.Name" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />"
-										required>
+									<input v-model="editModal.data.Name" class="form-control" type="text"
+										placeholder="<s:property value="lgView.getId('032') + lgView.getId('035') + lgView.getId('006')" />" required>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -252,7 +255,7 @@
 									<s:property value="lgView.getId('002')" />
 								</label>
 								<div class="col-sm-9">
-									<select v-model="editModal.data.Factory" class="form-control selectpicker show-tick" data-live-search="true" data-size="5">
+									<select v-model="editModal.data.FactoryId" class="form-control selectpicker show-tick" data-style="btn-outline-dark text-body" data-live-search="true" data-size="5">
 										<option value="" v-for="(v, i) in factorysList" :key="i" v-text="v.label" :value="v.val"></option>
 									</select>
 								</div>
@@ -264,7 +267,8 @@
 											<s:property value="lgView.getId('013')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Reserve" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
+											<input v-model="editModal.data.Reserve" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('013')" />" required>
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -272,7 +276,8 @@
 											<s:property value="lgView.getId('015')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Cost" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
+											<input v-model="editModal.data.Cost" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('038')" />" required>
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -280,7 +285,8 @@
 											<s:property value="lgView.getId('016')" />
 										</label>
 										<div>
-											<input v-model="editModal.data.Price" class="form-control" type="text" placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
+											<input v-model="editModal.data.Price" class="form-control" type="text"
+												placeholder="<s:property value="lgView.getId('032') + lgView.getId('039')" />" required>
 										</div>
 									</div>
 								</div>
@@ -324,8 +330,7 @@
 				var dataC = dataControl;
 				pageC.currentPage = 1;
 				pageC.totalRecord = dataC.showData.length;
-				pageC.pageCounts = Math
-						.ceil((pageC.totalRecord / pageC.showRecord));
+				pageC.pageCounts = Math.ceil((pageC.totalRecord / pageC.showRecord));
 			}
 		},
 		mounted : function() {
@@ -333,15 +338,7 @@
 		},
 		methods : {
 			add : function(e) {
-				modalControl.addModal.dataList = [ {
-					Reserve : 0,
-					Factory : '',
-					Cost : 0,
-					Name : '',
-					Remark : '',
-					Price : 0,
-					Id : ''
-				} ]
+				modalControl.addModal.dataList = [ Object.assign({}, modalControl.addModal.template) ]
 				$('#addModal').modal('toggle')
 			},
 			edit : function(e) {
@@ -362,7 +359,7 @@
 				}
 				$.each(checkedData, function(idx, val) {
 					var checkedId = val.Id
-					g.ajax("maintainConsumer", {
+					g.ajax("maintainGoods", {
 						del : {
 							Id : checkedId
 						}
@@ -395,6 +392,8 @@
 		name : 'DataControl',
 		data : {
 			list : JSON.parse(`${ request.dataList }`),
+			factorys : JSON.parse(`${ request.factorys }`),
+			factorysMap : {},
 		},
 		computed : {
 			showData : function() {
@@ -402,8 +401,7 @@
 				var toolC = toolControl;
 				var tmp = this.list;
 				tmp = $.map(tmp, function(val, key) {
-					var ma = new RegExp(".*" + toolC.superSearchInput + ".*",
-							"i");
+					var ma = new RegExp(".*" + toolC.superSearchInput + ".*", "i");
 					if (ma.test(JSON.stringify(val)))
 						return val
 				})
@@ -422,10 +420,14 @@
 						return val
 				})
 				return tmp;
-			}
+			},
+
 		},
 		mounted : function() {
-
+			var vm = this;
+			$.each(vm.factorys, function(key, val) {
+				vm.factorysMap[val.Id] = val.Name;
+			})
 		},
 		methods : {
 			delData : function(id) {
@@ -435,9 +437,13 @@
 				})
 			},
 			updData : function(tmpData) {
+				var vm = this;
 				this.list = $.map(this.list, function(val, key) {
-					if (val.Id == tmpData.Id)
-						Object.assign(val, tmpData)
+					if (val.Id == tmpData.Id) {
+						Object.assign(val, Object.assign(tmpData, {
+							FactoryName : vm.factorysMap[tmpData.FactoryId]
+						}))
+					}
 					return val;
 				})
 			}
@@ -447,37 +453,48 @@
 		el : '#modal-control',
 		name : 'ModalControl',
 		data : {
-			factorys : JSON.parse(`${ request.factorys }`),
 			editModal : {
 				data : {},
 			},
 			addModal : {
 				dataList : [ {} ],
+				template : {
+					Reserve : '',
+					FactoryId : '',
+					Cost : '',
+					Name : '',
+					Remark : '',
+					Price : '',
+					Id : ''
+				}
 			}
 		},
 		computed : {
 			factorysList : function() {
-				var tmp = $.map(this.factorys, function(v, key) {
+				var tmp = $.map(dataControl.factorys, function(v, key) {
 					return {
 						label : v.Id + ' - ' + v.Name,
 						val : v.Id,
 					}
 				})
 				return tmp;
-			}, 
-			totalPrice : function(){
+			},
+			totalReserve : function() {
 				var tmp = 0;
-				$.each(this.addModal.dataList, function(idx, val){
-					tmp += val.Price;
+				$.each(this.addModal.dataList, function(idx, val) {
+					var temp = isNaN(parseFloat(val.Reserve)) ? 0 : parseFloat(val.Reserve);
+					tmp += temp;
 				})
-				return tmp;
-			}, 
-			totalCost : function(){
+				return isNaN(tmp.toFixed(0)) ? 0 : tmp.toFixed(0);
+			},
+			totalCost : function() {
 				var tmp = 0;
-				$.each(this.addModal.dataList, function(idx, val){
-					tmp += parseFloat(val.Cost);
+				$.each(this.addModal.dataList, function(idx, val) {
+					var tempCost = isNaN(parseFloat(val.Cost)) ? 0 : parseFloat(val.Cost);
+					var tempReserve = isNaN(parseFloat(val.Reserve)) ? 0 : parseFloat(val.Reserve);
+					tmp += tempCost * tempReserve;
 				})
-				return tmp;
+				return isNaN(tmp.toFixed(2)) ? 0 : tmp.toFixed(2);
 			}
 		},
 		mounted : function() {
@@ -486,7 +503,7 @@
 			editModalSubmit : function(e) {
 				e.preventDefault();
 				var vm = this
-				g.ajax("maintainConsumer", {
+				g.ajax("maintainGoods", {
 					edit : vm.editModal.data
 				}, {
 					btn : $(e.target).find('button[type=submit]'),
@@ -501,8 +518,8 @@
 			addModalSubmit : function(e) {
 				e.preventDefault();
 				var vm = this
-				g.ajax("maintainConsumer", {
-					add : vm.addModal.data
+				g.ajax("maintainGoods", {
+					add : vm.addModal.dataList
 				}, {
 					btn : $(e.target).find('button[type=submit]'),
 					func : {
@@ -511,6 +528,15 @@
 						}
 					}
 				});
+			},
+			addModalAddData : function(idx) {
+				var tmp = Object.assign({}, this.addModal.template)
+				this.addModal.dataList.splice((idx + 1), 0, Object.assign(tmp, {
+					FactoryId : this.addModal.dataList[idx].FactoryId
+				}))
+			},
+			addModalDelData : function(idx) {
+				this.addModal.dataList.splice(idx, 1)
 			}
 		},
 	})

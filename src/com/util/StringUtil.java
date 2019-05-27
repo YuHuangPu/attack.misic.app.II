@@ -1,13 +1,22 @@
 package com.util;
 
-public class StringUtil extends org.apache.commons.lang.StringUtils{
+public class StringUtil extends org.apache.commons.lang.StringUtils {
 	public static String DBConn = "N";
+
+	public static String getWhereCondiotnIn(int length) {
+		StringBuffer result = new StringBuffer(" (");
+		for (int i = 0; i < length; i++) {
+			result.append("?").append(", ");
+		}
+		return result.substring(0, result.length() - 2).concat(")");
+	}
 
 	public static String eliminateNull(Object original_obj) {
 		return eliminateNull(original_obj, "");
 	}
+
 	public static String eliminateNull(Object original_obj, String default_value) {
-		String result = isNull(original_obj) ? (isNull(default_value)?"":default_value) : String.valueOf(original_obj) ;
+		String result = isNull(original_obj) ? (isNull(default_value) ? "" : default_value) : String.valueOf(original_obj);
 		return result;
 	}
 

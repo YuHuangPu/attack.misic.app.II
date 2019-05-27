@@ -72,6 +72,14 @@
 		<url-pattern>/addFactory</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>queryTable</servlet-name>
+		<servlet-class>com.ama.servlet.queryTable</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>queryTable</servlet-name>
+		<url-pattern>/queryTable</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>editFactory</servlet-name>
 		<servlet-class>com.ama.servlet.editFactory</servlet-class>
 	</servlet>

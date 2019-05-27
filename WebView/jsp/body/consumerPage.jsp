@@ -35,7 +35,7 @@
 							</div>
 						</div>
 						<div class="col-auto">
-							<div class="btn-group" role="group" aria-label="Basic example">
+							<div class="btn-group" role="group">
 								<button class="btn btn-outline-secondary btn-lg" type="button" @click="add">
 									<i class="fa fa-plus fa-lg"></i>
 								</button>
@@ -73,18 +73,18 @@
 									<th>
 										<s:property value="lgView.getId('010')" />
 									</th>
-									<th>
-										<s:property value="lgView.getId('017')" />
-									</th>
-									<th>
-										<s:property value="lgView.getId('018')" />
-									</th>
-									<th>
-										<s:property value="lgView.getId('011')" />
-									</th>
-									<th>
-										<s:property value="lgView.getId('012')" />
-									</th>
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('017')" /> --%>
+<!-- 									</th> -->
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('018')" /> --%>
+<!-- 									</th> -->
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('011')" /> --%>
+<!-- 									</th> -->
+<!-- 									<th> -->
+<%-- 										<s:property value="lgView.getId('012')" /> --%>
+<!-- 									</th> -->
 								</tr>
 							</thead>
 							<tbody id="data-control">
@@ -98,10 +98,10 @@
 									<td>{{ val.Name }}</td>
 									<td>{{ val.Mobile }}</td>
 									<td>{{ val.Remark }}</td>
-									<td>{{ val.CreateWho }}</td>
-									<td>{{ val.CreateDate }}</td>
-									<td>{{ val.UpdateWho }}</td>
-									<td>{{ val.UpdateDate }}</td>
+<!-- 									<td>{{ val.CreateWho }}</td> -->
+<!-- 									<td>{{ val.CreateDate }}</td> -->
+<!-- 									<td>{{ val.UpdateWho }}</td> -->
+<!-- 									<td>{{ val.UpdateDate }}</td> -->
 								</tr>
 							</tbody>
 						</table>

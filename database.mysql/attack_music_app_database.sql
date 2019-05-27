@@ -2,10 +2,10 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- 主機: 127.0.0.1
--- 產生時間： 2018-05-16 07:15:02
--- 伺服器版本: 10.1.21-MariaDB
--- PHP 版本： 5.6.30
+-- 銝餅��: 127.0.0.1
+-- ������� 2018-05-16 07:15:02
+-- 隡箸���: 10.1.21-MariaDB
+-- PHP ��嚗� 5.6.30
 
  CREATE USER 'AM.user'@'%' IDENTIFIED BY 'ttg83m4';
 
@@ -15,7 +15,7 @@
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫： `AM.user`
+-- 鞈�澈嚗� `AM.user`
 --
 CREATE DATABASE IF NOT EXISTS `attack.music.app.database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `attack.music.app.database`;
@@ -26,13 +26,13 @@ TO 'AM.user'@'%';
 
 -- --------------------------------------------------------
 --
--- 資料庫： `attack.music.app.database`
+-- 鞈�澈嚗� `attack.music.app.database`
 --
 
 -- --------------------------------------------------------
 
 --
--- 資料表結構 ACCOUNT
+-- 鞈�”蝯�� ACCOUNT
 --
 
 CREATE TABLE `ACCOUNT` (
@@ -46,7 +46,7 @@ CREATE TABLE `ACCOUNT` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- 資料表的匯出資料 `account`
+-- 鞈�”���鞈�� `account`
 --
 
 INSERT INTO `ACCOUNT` (`ID`, `ACCOUNT`, `PASSWORD`, `STATUS`, `EMAIL`, `REMARK`, `CREATE_DATE`) VALUES
@@ -56,7 +56,7 @@ INSERT INTO `ACCOUNT` (`ID`, `ACCOUNT`, `PASSWORD`, `STATUS`, `EMAIL`, `REMARK`,
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `CONSUMER`
+-- 鞈�”蝯�� `CONSUMER`
 --
 
 CREATE TABLE `CONSUMER` (
@@ -73,14 +73,14 @@ CREATE TABLE `CONSUMER` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- 資料表的匯出資料 `CONSUMER`
+-- 鞈�”���鞈�� `CONSUMER`
 --
 
 INSERT INTO `CONSUMER` (`ITEM`, `ID`, `STATUS`, `NAME`, `MOBILE`, `REMARK`, `CREATE_DATE`, `CREATE_WHO`, `UPDATE_DATE`, `UPDATE_WHO`) VALUES
-(0, '.', 'D', '鐵克樂器', NULL, NULL, NOW(), 0, NULL, NULL);
+(0, '.', 'D', '����', NULL, NULL, NOW(), 0, NULL, NULL);
 
 --
--- 觸發器 `CONSUMER`
+-- 閫貊� `CONSUMER`
 --
 DELIMITER $$
 CREATE TRIGGER `tri_Auto_Item` BEFORE INSERT ON `CONSUMER` FOR EACH ROW BEGIN
@@ -97,7 +97,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `FACTORY`
+-- 鞈�”蝯�� `FACTORY`
 --
 
 CREATE TABLE `FACTORY` (
@@ -116,7 +116,7 @@ CREATE TABLE `FACTORY` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- 觸發器 `FACTORY`
+-- 閫貊� `FACTORY`
 --
 DELIMITER $$
 CREATE TRIGGER `tri_Factory_Auto_Index` BEFORE INSERT ON `FACTORY` FOR EACH ROW BEGIN
@@ -133,7 +133,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- 資料表結構 GOODS
+-- 鞈�”蝯�� GOODS
 --
 
 CREATE TABLE `GOODS` (
@@ -154,7 +154,7 @@ CREATE TABLE `GOODS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- 觸發器 `GOODS`
+-- 閫貊� `GOODS`
 --
 DELIMITER $$
 CREATE TRIGGER `tri_Goods_Auto_Index` BEFORE INSERT ON `GOODS` FOR EACH ROW BEGIN
@@ -171,7 +171,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `GOODS_DETAIL`
+-- 鞈�”蝯�� `GOODS_DETAIL`
 --
 
 CREATE TABLE `GOODS_DETAIL` (
@@ -188,7 +188,7 @@ CREATE TABLE `GOODS_DETAIL` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- 觸發器 `GOODS_DETAIL`
+-- 閫貊� `GOODS_DETAIL`
 --
 DELIMITER $$
 CREATE TRIGGER `tri_GoodsDtail_Auto_Index` BEFORE INSERT ON `GOODS_DETAIL` FOR EACH ROW BEGIN
@@ -200,25 +200,25 @@ $$
 DELIMITER ;
 
 --
--- 已匯出資料表的索引
+-- 撌脣�鞈�”��揣撘�
 --
 
 --
--- 資料表索引 ACCOUNT
+-- 鞈�”蝝Ｗ�� ACCOUNT
 --
 ALTER TABLE `ACCOUNT`
   ADD PRIMARY KEY (`ACCOUNT`),
   ADD UNIQUE KEY `ID` (`ID`);
 
 --
--- 資料表索引 `CONSUMER`
+-- 鞈�”蝝Ｗ�� `CONSUMER`
 --
 ALTER TABLE `CONSUMER`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `ITEM` (`ITEM`);
 
 --
--- 資料表索引 `FACTORY`
+-- 鞈�”蝝Ｗ�� `FACTORY`
 --
 ALTER TABLE `FACTORY`
   ADD PRIMARY KEY (`ID`),
@@ -227,7 +227,7 @@ ALTER TABLE `FACTORY`
   ADD KEY `fk_factory_account_id` (`CREATE_WHO`);
 
 --
--- 資料表索引 `GOODS`
+-- 鞈�”蝝Ｗ�� `GOODS`
 --
 ALTER TABLE `GOODS`
   ADD PRIMARY KEY (`ID`),
@@ -235,7 +235,7 @@ ALTER TABLE `GOODS`
   ADD KEY `fk_goods_factory_id` (`FACTORY`);
 
 --
--- 資料表索引 `GOODS_DETAIL`
+-- 鞈�”蝝Ｗ�� `GOODS_DETAIL`
 --
 ALTER TABLE `GOODS_DETAIL`
   ADD PRIMARY KEY (`ITEM`),
@@ -244,23 +244,23 @@ ALTER TABLE `GOODS_DETAIL`
   ADD KEY `fk_goodsDetail_consumer_id` (`CONSUMER_ID`);
 
 --
--- 已匯出資料表的限制(Constraint)
+-- 撌脣�鞈�”���(Constraint)
 --
 
 --
--- 資料表的 Constraints FACTORY
+-- 鞈�”��� Constraints FACTORY
 --
 ALTER TABLE `FACTORY`
   ADD CONSTRAINT `fk_factory_account_id` FOREIGN KEY (`CREATE_WHO`) REFERENCES ACCOUNT (`ID`);
 
 --
--- 資料表的 Constraints `GOODS`
+-- 鞈�”��� Constraints `GOODS`
 --
 ALTER TABLE `GOODS`
   ADD CONSTRAINT `fk_goods_factory_id` FOREIGN KEY (`FACTORY`) REFERENCES `FACTORY` (`ID`);
 
 --
--- 資料表的 Constraints `GOODS_DETAIL`
+-- 鞈�”��� Constraints `GOODS_DETAIL`
 --
 ALTER TABLE `GOODS_DETAIL`
   ADD CONSTRAINT `fk_goodsDetail_consumer_id` FOREIGN KEY (`CONSUMER_ID`) REFERENCES `CONSUMER` (`ID`),
@@ -287,3 +287,13 @@ IF NEW.STATUS = 'N' THEN
 END
 $$
 DELIMITER ;
+
+-- 20190527
+ALTER TABLE `attack.music.app.database.test`.`goods` 
+DROP FOREIGN KEY `fk_goods_factory_id`;
+ALTER TABLE `attack.music.app.database.test`.`goods` 
+CHANGE COLUMN `FACTORY` `FACTORY_ID` VARCHAR(20) NULL DEFAULT NULL ;
+ALTER TABLE `attack.music.app.database.test`.`goods` 
+ADD CONSTRAINT `fk_goods_factory_id`
+  FOREIGN KEY (`FACTORY_ID`)
+  REFERENCES `attack.music.app.database.test`.`factory` (`ID`);

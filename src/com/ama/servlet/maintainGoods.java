@@ -29,17 +29,18 @@ import ora.json.JSONObject;
 @WebServlet("/purchaseGoods")
 public class maintainGoods extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public maintainGoods() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public maintainGoods() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 //	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		// TODO Auto-generated method stub
@@ -47,7 +48,8 @@ public class maintainGoods extends HttpServlet {
 //	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter result = null;
@@ -61,81 +63,63 @@ public class maintainGoods extends HttpServlet {
 			e.printStackTrace();
 			result.append(new JSONObject().put("status", Boolean.FALSE).put("message", "something error").toString());
 			DataBaseUtil.RollBack(conn);
-		} finally{
+		} finally {
 			DataBaseUtil.closeConnection(conn);
 			result.close();
 		}
 	}
-	private String execute(HttpServletRequest request, HttpServletResponse response, ora.json.JSONObject reqJson, Connection conn) throws SQLException, JSONException, ParseException{
+
+	private String execute(HttpServletRequest request, HttpServletResponse response, ora.json.JSONObject reqJson, Connection conn) throws SQLException, JSONException, ParseException {
 		JSONObject result = new JSONObject().put("status", Boolean.TRUE);
 		PreparedStatement pstmt = null;
-		String userID = (((UserInfo)request.getSession().getAttribute(Keys.Session.LoginAccount)).getId());
+		String userID = (((UserInfo) request.getSession().getAttribute(Keys.Session.LoginAccount)).getId());
 		java.sql.Timestamp CreateDate = new java.sql.Timestamp(new Date().getTime());
-		if(reqJson.has("addGoods")){
-			reqJson = reqJson.getJSONObject("addGoods");
-			Iterator<Object> itrs = reqJson.getJSONArray("GoodsList").iterator();
-			while(itrs.hasNext()){
-				JSONObject goods = (JSONObject)itrs.next();
-				goods.put("FactoryId", reqJson.getString("FactoryId"));
-				goods.put("GoodsId",StringUtil.nvlString(goods.getString("GoodsId"), "0") );
-				goods.put("GoodsReserve",StringUtil.nvlString(goods.getString("GoodsReserve"), "0") );
-				goods.put("GoodsCost", StringUtil.nvlString(goods.getString("GoodsCost"), "0") );
-				goods.put("GoodsPrice", StringUtil.nvlString(goods.getString("GoodsPrice"), "0") );
+		if (reqJson.has("add")) {
+			Iterator<Object> itrs = reqJson.getJSONArray("add").iterator();
+			while (itrs.hasNext()) {
+				JSONObject goods = (JSONObject) itrs.next();
 				addGoods(goods, conn, pstmt, CreateDate, userID);
 			}
-		}else if(reqJson.has("editGoods")){
-			reqJson = reqJson.getJSONObject("editGoods");
-			
-			String sql = "UPDATE `GOODS` SET "
-					+ "`NAME` = ?, "
-					+ "`RESERVE` = ?, "
-					+ "`COST` = ?, "
-					+ "`PRICE` = ?, "
-					+ "`FACTORY` = ?, "
-					+ "`REMARK` = ?, "
-					+ "`UPDATE_DATE` = ?, "
-					+ "`UPDATE_WHO` = ? "
-					+ "WHERE `GOODS`.`ID` = ?;";
+		} else if (reqJson.has("edit")) {
+			reqJson = reqJson.getJSONObject("edit");
+
+			String sql = "UPDATE `GOODS` SET " + "`NAME` = ?, " + "`RESERVE` = ?, " + "`COST` = ?, " + "`PRICE` = ?, " + "`FACTORY_ID` = ?, " + "`REMARK` = ?, " + "`UPDATE_DATE` = ?, "
+					+ "`UPDATE_WHO` = ? " + "WHERE `GOODS`.`ID` = ?;";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, reqJson.getString("GoodsName"));
-			pstmt.setString(2, reqJson.getString("GoodsReserve"));
-			pstmt.setString(3, reqJson.getString("GoodsCost"));
-			pstmt.setString(4, reqJson.getString("GoodsPrice"));
+			pstmt.setString(1, reqJson.getString("Name"));
+			pstmt.setString(2, reqJson.getString("Reserve"));
+			pstmt.setString(3, reqJson.getString("Cost"));
+			pstmt.setString(4, reqJson.getString("Price"));
 			pstmt.setString(5, reqJson.getString("FactoryId"));
-			pstmt.setString(6, reqJson.getString("GoodsRemark"));
+			pstmt.setString(6, reqJson.getString("Remark"));
 			pstmt.setTimestamp(7, CreateDate);
 			pstmt.setString(8, userID);
-			pstmt.setString(9, reqJson.getString("GoodsId"));
+			pstmt.setString(9, reqJson.getString("Id"));
 			pstmt.execute();
-			
-		}else if(reqJson.has("delGoods")){
-			reqJson = reqJson.getJSONObject("delGoods");
-			
-			String sql = "UPDATE `GOODS` SET "
-					+ "`STATUS` = 'N', "
-					+ "`UPDATE_DATE` = ?, "
-					+ "`UPDATE_WHO` = ? "
-					+ "WHERE `GOODS`.`ID` = ?;";
+
+		} else if (reqJson.has("del")) {
+			reqJson = reqJson.getJSONObject("del");
+
+			String sql = "DELETE FROM `GOODS` WHERE `GOODS`.`ID` = ?;";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setTimestamp(1, CreateDate);
-			pstmt.setString(2, userID);
-			pstmt.setString(3, reqJson.getString("GoodsId"));
+			pstmt.setString(1, reqJson.getString("Id"));
 			pstmt.execute();
-			
+
 		}
 		return result.toString();
 	}
-	private void addGoods(JSONObject reqJson, Connection conn, PreparedStatement pstmt, java.sql.Timestamp CreateDate, String userID) throws SQLException, JSONException, ParseException{
-		String sql = "INSERT INTO `GOODS` (`ITEM`, `ID`, `NAME`, `STATUS`, `RESERVE`, `PURCHASE`, `SELL`, `COST`, `PRICE`, `FACTORY`, `REMARK`, `CREATE_DATE`, `UPDATE_DATE`, `CREATE_WHO`, `UPDATE_WHO`) "
+
+	private void addGoods(JSONObject reqJson, Connection conn, PreparedStatement pstmt, java.sql.Timestamp CreateDate, String userID) throws SQLException, JSONException, ParseException {
+		String sql = "INSERT INTO `GOODS` (`ITEM`, `ID`, `NAME`, `STATUS`, `RESERVE`, `PURCHASE`, `SELL`, `COST`, `PRICE`, `FACTORY_ID`, `REMARK`, `CREATE_DATE`, `UPDATE_DATE`, `CREATE_WHO`, `UPDATE_WHO`) "
 				+ "VALUES ('0', ?, ?, 'S', ?, '0', '0', ?, ?, ?, ?, ?, ?, ?, ?);";
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqJson.getString("GoodsId"));
-		pstmt.setString(2, reqJson.getString("GoodsName"));
-		pstmt.setString(3, reqJson.getString("GoodsReserve"));
-		pstmt.setString(4, reqJson.getString("GoodsCost"));
-		pstmt.setString(5, reqJson.getString("GoodsPrice"));
+		pstmt.setString(1, StringUtil.eliminateNull(reqJson.getString("Id"), "0"));
+		pstmt.setString(2, reqJson.getString("Name"));
+		pstmt.setString(3, reqJson.getString("Reserve"));
+		pstmt.setString(4, reqJson.getString("Cost"));
+		pstmt.setString(5, reqJson.getString("Price"));
 		pstmt.setString(6, reqJson.getString("FactoryId"));
-		pstmt.setString(7, reqJson.getString("GoodsRemark"));
+		pstmt.setString(7, reqJson.getString("Remark"));
 		pstmt.setTimestamp(8, CreateDate);
 		pstmt.setTimestamp(9, CreateDate);
 		pstmt.setString(10, userID);

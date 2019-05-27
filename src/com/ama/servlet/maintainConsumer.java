@@ -76,7 +76,7 @@ public class maintainConsumer extends HttpServlet {
 			sql = "INSERT INTO CONSUMER (`ITEM`, `ID`, `STATUS`, `NAME`, `MOBILE`, `REMARK`, `CREATE_DATE`, `CREATE_WHO`) "
 					+ "VALUES ('0', ?, 'S', ?, ?, ?, ?, ?);";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, StringUtil.isNull(reqJson.getString("Id"))?"0":reqJson.getString("Id"));
+			pstmt.setString(1, StringUtil.eliminateNull(reqJson.getString("Id"), "0"));
 			pstmt.setString(2, reqJson.getString("Name"));
 			pstmt.setString(3, reqJson.getString("Mobile"));
 			pstmt.setString(4, reqJson.getString("Remark"));

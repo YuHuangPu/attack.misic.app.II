@@ -73,7 +73,7 @@ public class addFactory extends HttpServlet {
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		String userID = (((UserInfo)request.getSession().getAttribute(Keys.Session.LoginAccount)).getId());
 		java.sql.Timestamp CreateDate = new java.sql.Timestamp(new Date().getTime());
-		pstmt.setString(1, StringUtil.isNull(reqJson.getString("Id"))?"0":reqJson.getString("Id"));
+		pstmt.setString(1, StringUtil.eliminateNull(reqJson.getString("Id"), "0"));
 		pstmt.setString(2, reqJson.getString("Name"));
 		pstmt.setString(3, reqJson.getString("Contact"));
 		pstmt.setString(4, reqJson.getString("Address"));

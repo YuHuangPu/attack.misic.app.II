@@ -33,7 +33,7 @@ public class LoginCheck extends com.ama.data.info.UserInfo {
 			conn = com.util.DataBaseUtil.getConnection(Keys.COMPANY_JNDI_NAME, Boolean.TRUE);
 			accountView = new Views(conn, Keys.View.UserInfo) ;
 			String MD5Password = com.util.EncryptUtil.EncryptString(this.getPassword());
-			accountView.setPstmt( MD5Password, this.getAccount());
+			accountView.setPstmt( new Object[] {MD5Password, this.getAccount()});
 			JSONArray LoginAccount = accountView.getDatalistJSONArray(Boolean.FALSE);
 			if(LoginAccount.length() == 0 ){
 				return com.ama.common.Keys.WEB_FAIL;
