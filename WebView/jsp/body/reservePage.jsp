@@ -117,9 +117,6 @@
 						<jsp:include page="/jsp/common/pageList.jsp"></jsp:include>
 					</div>
 				</div>
-				<div class="card-footer small text-muted">
-					<s:property value='#attr.MaxUpdate' />
-				</div>
 			</div>
 		</div>
 		<!-- /.container-fluid-->
@@ -498,6 +495,9 @@
 			}
 		},
 		mounted : function() {
+		},
+		updated : function() {
+			$('.selectpicker').selectpicker('refresh');
 		},
 		methods : {
 			editModalSubmit : function(e) {

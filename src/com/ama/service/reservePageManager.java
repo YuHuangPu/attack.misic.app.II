@@ -49,14 +49,10 @@ public class reservePageManager extends com.ama.common.BaseManager {
 			
 			JSONArray gInfo = vw.getDatalistJSONArray(Boolean.FALSE);
 
-			Views maxUpdate = new Views(this.getConn(), Keys.View.GoodsDetailMaxUpdate);
-			JSONArray mUpdate = maxUpdate.getDatalistJSONArray(Boolean.FALSE);
-
 			vw = new Views(SqlFactory.getFactoryInfo(null), this.getConn());
 			
 			JSONArray factoryData = vw.getDatalistJSONArray(Boolean.FALSE);
 			request.setAttribute("dataList", gInfo.toString().replace("\"", "\\\"").replace("'", "\\'"));
-			request.setAttribute("MaxUpdate", mUpdate.getJSONObject(0).getString("MaxUpdate"));
 			request.setAttribute("factorys", factoryData.toString().replace("\"", "\\\"").replace("'", "\\'"));
 
 		} catch (SQLException e) {

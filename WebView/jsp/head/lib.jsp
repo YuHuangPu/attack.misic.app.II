@@ -113,4 +113,58 @@
 			});
 		}
 	}
+	Date.prototype.format = function(fmt) {
+		var o = {
+			"M+" : this.getMonth() + 1,
+			"d+" : this.getDate(),
+			"h+" : this.getHours(),
+			"m+" : this.getMinutes(),
+			"s+" : this.getSeconds(),
+			"q+" : Math.floor((this.getMonth() + 3) / 3),
+			"S" : this.getMilliseconds()
+		};
+
+		if (/(y+)/.test(fmt)) {
+			fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		}
+
+		for ( var k in o) {
+			if (new RegExp("(" + k + ")").test(fmt)) {
+				fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			}
+		}
+		return fmt;
+	}
+	Number.prototype.format = function(c, d, t) {
+		var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "." : d, t = t == undefined ? "," : t, s = n < 0 ? "-" : "", i = String(parseInt(n = Math
+				.abs(Number(n) || 0).toFixed(c))), j = (j = i.length) > 3 ? j % 3 : 0;
+		return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t)
+				+ (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	};
+	String.format = function() {
+		var s = arguments[0];
+		if (s == null)
+			return "";
+		for (var i = 0; i < arguments.length - 1; i++) {
+			var reg = getStringFormatPlaceHolderRegEx(i);
+			s = s.replace(reg, (arguments[i + 1] == null ? "" : arguments[i + 1]));
+		}
+		return cleanStringFormatResult(s);
+	}
+	String.prototype.format = function() {
+		var txt = this.toString();
+		for (var i = 0; i < arguments.length; i++) {
+			var exp = getStringFormatPlaceHolderRegEx(i);
+			txt = txt.replace(exp, (arguments[i] == null ? "" : arguments[i]));
+		}
+		return cleanStringFormatResult(txt);
+	}
+	function getStringFormatPlaceHolderRegEx(placeHolderIndex) {
+		return new RegExp('({)?\\{' + placeHolderIndex + '\\}(?!})', 'gm')
+	}
+	function cleanStringFormatResult(txt) {
+		if (txt == null)
+			return "";
+		return txt.replace(getStringFormatPlaceHolderRegEx("\\d+"), "");
+	}
 </script>

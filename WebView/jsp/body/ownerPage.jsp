@@ -63,6 +63,8 @@
 						<div class="card-body">
 							<blockquote class="blockquote mb-0">
 								<p>${ versionDescription }</p>
+								真正的刪除來了, 之前被隱藏起來的都回來了 :D
+								<p></p>
 								<footer class="blockquote-footer">
 									黃子育
 									<cite title="Source Title">${ deployDate }</cite>

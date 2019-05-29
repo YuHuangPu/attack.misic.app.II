@@ -106,9 +106,6 @@
 					</table>
 					<jsp:include page="/jsp/common/pageList.jsp"></jsp:include>
 				</div>
-				<div class="card-footer small text-muted">
-					<s:property value='#attr.MaxUpdate' />
-				</div>
 			</div>
 		</div>
 

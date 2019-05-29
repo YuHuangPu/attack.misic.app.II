@@ -74,14 +74,14 @@
 						</div>
 						<div class="col-auto  align-self-center">
 							<div class="btn-group " role="group">
-								<button class="btn btn-outline-secondary btn-lg" type="button">
-									<i class="fa fa-cart-arrow-down fa-5x"></i>
-								</button>
-								<button class="btn btn-outline-secondary btn-lg" type="button">
-									<i class="fa fa-truck fa-5x"></i>
-								</button>
-								<button class="btn btn-outline-secondary btn-lg" type="button">
+								<button class="btn btn-outline-secondary btn-lg" type="button" @click="list">
 									<i class="fa fa-list-ol fa-5x"></i>
+								</button>
+								<button class="btn btn-outline-secondary btn-lg disabled" type="button" @click="edit">
+									<i class="fa fa-pencil fa-5x"></i>
+								</button>
+								<button class="btn btn-outline-secondary btn-lg" type="button" @click="del">
+									<i class="fa fa-minus fa-5x"></i>
 								</button>
 							</div>
 						</div>
@@ -91,11 +91,14 @@
 					<i class="fa fa-handshake-o"></i>
 					<s:property value="lgView.getId('019')+lgView.getId('003')" />
 				</div>
-				<div class="card-body">
+				<div class="card-body pb-0">
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 							<thead>
 								<tr>
+									<th>
+										<s:property value="lgView.getId('004')" />
+									</th>
 									<th>
 										<s:property value="lgView.getId('005')" />
 									</th>
@@ -124,6 +127,11 @@
 							</thead>
 							<tbody id="data-control">
 								<tr v-for="(val, idx) in showDataList" :key="idx">
+									<td>
+										<div class="form-group form-check" :id="val.Id">
+											<input v-model="val.checked" class="form-check-input" type="checkbox">
+										</div>
+									</td>
 									<td>{{ val.GoodsId }}</td>
 									<td>{{ val.GoodsName }}</td>
 									<td>{{ val.ConsumerName }}</td>
@@ -135,12 +143,20 @@
 								</tr>
 							</tbody>
 						</table>
-						<jsp:include page="/jsp/common/pageList.jsp"></jsp:include>
+						<div class="mr-3 ml-3">
+							<div class="row">
+								<div class="col-6 justify-content-start">
+									<label class="col-form-label" id="total-control"> {{ totalMsg }} </label>
+								</div>
+								<div class="col-6 justify-content-end">
+									<div class="float-right">
+										<jsp:include page="/jsp/common/pageList.jsp"></jsp:include>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
-				</div>
-				<div class="card-footer small text-muted">
-					<s:property value='#attr.MaxUpdate' />
 				</div>
 			</div>
 		</div>
@@ -149,121 +165,110 @@
 
 	</div>
 	<div id="modal-control">
-		<!-- add page -->
-		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
+		<!-- DayListPage -->
+		<div class="modal fade" id="listModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="ModalLabel">
-							<s:property value="lgView.getId('029')+ lgView.getId('036')" />
+						<h5 class="modal-title">
+							<s:property value="lgView.getId('040')" />
 						</h5>
-						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
 					</div>
-					<div class="modal-body ">
-						<form id="addForm" @submit="addModalSubmit" class="mb-0">
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('005')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="addModal.data.Id" type="text" placeholder="0">
+					<form id="listForm" class="mb-0" @submit="listSubmit">
+						<div class="modal-body">
+							<div class="rounded border border-light pr-2 pl-2" v-for="(dv, di) in list.dataList" :key="di">
+								<div class="form-group row">
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('036')" />
+										</label>
+										<select v-model="dv.ConsumerId" class="form-control selectpicker show-tick" data-style="btn-outline-dark text-body" data-live-search="true"
+											data-size="5" @change="consumerListOnChange(di)" required>
+											<option value="" v-for="(v, i) in consumerList" :key="i" v-text="v.label" :value="v.val"></option>
+										</select>
+									</div>
+									<div class="col-md-9">
+										<button class="close close-danger" type="button" v-if="list.dataList.length > 1" @click="listDelData(di)">
+											<span aria-hidden="true">×</span>
+										</button>
+										<button class="close close-primary" type="button" @click="listAddData(di)">
+											<span aria-hidden="true">+</span>
+										</button>
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('035')" />
+										</label>
+										<select v-model="dv.GoodsId" class="form-control selectpicker show-tick" data-style="btn-outline-dark text-body" data-live-search="true"
+											data-size="5" required>
+											<option value="" v-for="(v, i) in reserveList" :key="i" v-text="v.label" :value="v.val"></option>
+										</select>
+									</div>
+
+								</div>
+								<div class="form-group row mb-2">
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('037')" />
+										</label>
+										<input v-model="dv.SellDate" class="form-control" type="date" required>
+									</div>
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('024')" />
+										</label>
+										<input v-model="dv.Qty" class="form-control" type="text" required>
+									</div>
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('016')" />
+										</label>
+										<input v-model="dv.Price" class="form-control" type="text" required>
+									</div>
+									<div class="col-md-3">
+										<label class="col-form-label">
+											<font :class="dv.Color">{{ dv.StatusName }}</font>
+											<s:property value="lgView.getId('010')" />
+										</label>
+										<input v-model="dv.Remark" class="form-control" type="text">
+									</div>
+								</div>
+								<div class="form-group row mb-2"></div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div class="container">
+								<div class="row">
+									<div class="col-6 justify-content-start b">
+										<label class="col-form-label">
+											<s:property value="lgView.getId('024') + ' :'" />
+											<font class="text-danger">{{ totalQty.I }}</font>
+											/
+											<font class="text-info">{{ totalQty.O }}</font>
+											<s:property value="lgView.getId('043') + ' :'" />
+											<font class="text-danger">{{ totalPrice.I }}</font>
+											/
+											<font class="text-info">{{ totalPrice.O }}</font>
+										</label>
+									</div>
+									<div class="col-6 justify-content-end">
+										<div class="float-right">
+											<button class="btn btn-secondary" type="button" data-dismiss="modal">
+												<s:property value="lgView.getId('028')" />
+											</button>
+											<button class="btn btn-primary text-white">
+												<s:property value="lgView.getId('031')" />
+											</button>
+										</div>
+									</div>
 								</div>
 							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('006')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="addModal.data.Name" type="text"
-										placeholder="<s:property value="lgView.getId('032') + lgView.getId('036') + lgView.getId('006')" />" required>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('009')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="addModal.data.Mobile" type="text"
-										placeholder="<s:property value="lgView.getId('032') + lgView.getId('036') + lgView.getId('009')" />" required>
-								</div>
-							</div>
-							<div class="form-group">
-								<label>
-									<s:property value="lgView.getId('010')" />
-								</label>
-								<textarea class="form-control" v-model="addModal.data.Remark" type="text" placeholder=""></textarea>
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-secondary" type="button" data-dismiss="modal">
-									<s:property value="lgView.getId('028')" />
-								</button>
-								<button class="btn btn-primary text-white">
-									<s:property value="lgView.getId('031')" />
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- edit page -->
-		<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="ModalLabel">
-							<s:property value="lgView.getId('004')+ lgView.getId('036')" />
-						</h5>
-						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
-					<div class="modal-body ">
-						<form id="editForm" @submit="editModalSubmit" class="mb-0">
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('005')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="editModal.data.Id" type="text" placeholder="0" disabled>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('006')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="editModal.data.Name" type="text"
-										placeholder="<s:property value="lgView.getId('032') + lgView.getId('036') + lgView.getId('006')" />" required>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">
-									<s:property value="lgView.getId('009')" />
-								</label>
-								<div class="col-sm-9">
-									<input class="form-control" v-model="editModal.data.Mobile" type="text"
-										placeholder="<s:property value="lgView.getId('032') + lgView.getId('036') + lgView.getId('009')" />" required>
-								</div>
-							</div>
-							<div class="form-group">
-								<label>
-									<s:property value="lgView.getId('010')" />
-								</label>
-								<textarea v-model="editModal.data.Remark" class="form-control" type="text" placeholder=""></textarea>
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-secondary" type="button" data-dismiss="modal">
-									<s:property value="lgView.getId('028')" />
-								</button>
-								<button class="btn btn-primary text-white">
-									<s:property value="lgView.getId('031')" />
-								</button>
-							</div>
-						</form>
-					</div>
+						</div>
+
+					</form>
 				</div>
 			</div>
 		</div>
@@ -275,81 +280,155 @@
 		el : '#tool-control',
 		name : 'ToolControl',
 		data : {
-			searchConsumer : JSON.parse(`${ request.consumers }`),
+			searchConsumer : [ '001' ],
 			searchStatus : [ 'I', 'O' ],
-			searchDate : JSON.parse(`${ request.dateRange }`),
+			searchDate : [ '', '' ],
 			superSearchInput : '',
-			searchList : {
-				consumer : JSON.parse(`${ request.consumerList }`),
-				status : [ {
-					val : 'I',
-					label : `${ lgView.getId('020') }`
-				}, {
-					val : 'O',
-					label : `${ lgView.getId('014') }`
-				} ],
-
+			consumers : JSON.parse(`${ request.consumers }`),
+			reserve : JSON.parse(`${ request.reserve }`),
+			statusMap : {
+				'D' : {
+					text : `${ lgView.getId('020') }`,
+					color : 'text-danger'
+				},
+				'S' : {
+					text : `${ lgView.getId('014') }`,
+					color : 'text-info'
+				},
 			}
 		},
 		computed : {
+			searchList : function() {
+				return {
+					consumer : this.consumers,
+					status : [ {
+						val : 'I',
+						label : `${ lgView.getId('020') }`
+					}, {
+						val : 'O',
+						label : `${ lgView.getId('014') }`
+					} ],
 
+				}
+			},
+			consumerMap : function() {
+				var tmp = {}
+				$.each(this.consumers, function(idx, val) {
+					tmp[val.Id] = val
+				})
+				return tmp;
+			}
 		},
 		watch : {
 			searchConsumer : function(nV, oV) {
-				this.searchData();
+				dataControl.updPageControl();
 			},
 			searchStatus : function(nV, oV) {
-				this.searchData();
+				dataControl.updPageControl();
 			},
 			searchDate : function(nV, oV) {
-				this.searchData();
+				dataControl.updPageControl();
 			},
 			superSearchInput : function(nV, oV) {
-				this.searchData();
+				dataControl.updPageControl();
 			}
 		},
 		mounted : function() {
 
 		},
 		methods : {
-			searchData : function() {
-				var tmp = {
-					searchConsumer : this.searchConsumer,
-					searchStatus : this.searchStatus,
-					searchDate : this.searchDate,
-					superSearchInput : this.superSearchInput,
+			list : function() {
+				$('#listModal').modal('toggle')
+			},
+			edit : function() {
+
+			},
+			del : function(e) {
+				var checkedData = this.getCheckedData(true);
+				if (!checkedData) {
+					g.showMsg('error', 'choose one !!')
+					return;
 				}
-				g.ajax("queryTable", tmp, {
-					func : {
-						success : function(res) {
-							var pageC = pageControl;
-							var dataC = dataControl;
-							dataC.list = res.dataList;
-							pageC.currentPage = 1;
-							pageC.totalRecord = dataC.showData.length;
-							pageC.pageCounts = Math.ceil((pageC.totalRecord / pageC.showRecord));
+				$.each(checkedData, function(idx, val) {
+					var checkedId = val.Item
+					g.ajax("transactionGoods", {
+						del : {
+							Id : checkedId
 						}
-					}
-				});
+					}, {
+						btn : $(e.target),
+						func : {
+							success : function(res) {
+								dataControl.delData(checkedId);
+							}
+						}
+					});
+				})
+			},
+			getCheckedData : function(repeat) {
+				if (!dataControl.checkedData)
+					return false;
+				if (repeat) {
+					return dataControl.checkedData;
+				} else {
+					if (dataControl.checkedData.length != 1)
+						return false;
+					return dataControl.checkedData[0];
+				}
+
 			}
 		},
+	})
+	var totalControl = new Vue({
+		el : '#total-control',
+		name : 'TotalControl',
+		data : {
+			message : `${ lgView.getId('051') }`,
+			totalMsg : '',
+		},
+		computed : {},
+		mounted : function() {
+		},
+		methods : {},
 	})
 	var dataControl = new Vue({
 		el : '#data-control',
 		name : 'DataControl',
 		data : {
-			list : [],
+			list : JSON.parse(`${request.dataList}`),
+			consumers : JSON.parse(`${ request.consumers }`),
+			reserve : JSON.parse(`${ request.reserve }`),
 		},
 		computed : {
 			showData : function() {
-				var pageC = pageControl;
 				var toolC = toolControl;
 				var tmp = this.list;
+				var count = {}
+				var sum = 0;
+				var total = 0
 				tmp = $.map(tmp, function(val, key) {
 					var ma = new RegExp(".*" + toolC.superSearchInput + ".*", "i");
-					if (ma.test(JSON.stringify(val)))
-						return val
+					var sConsumer = toolC.searchConsumer
+					var sStatus = toolC.searchStatus
+					var sSellDate = toolC.searchDate
+
+					var re = (ma.test(JSON.stringify(val)));
+					if (sConsumer.length > 0)
+						re = re * (sConsumer.includes(val.ConsumerId));
+					if (sStatus.length > 0)
+						re = re * (sStatus.includes(val.Status));
+					if (sSellDate[0])
+						re = re * (new Date(val.SellDate) >= new Date(sSellDate[0]));
+					if (sSellDate[1])
+						re = re * (new Date(val.SellDate) <= new Date(sSellDate[1]));
+					if (re) {
+						count[val.GoodsId] = true
+						sum += parseInt(val.Amount)
+						total += parseFloat(val.Price)
+						return val;
+					}
 				})
+				totalControl.totalMsg = String.format(totalControl.message, Object.keys(count).length, sum, total.format(2, '.', ','))
 				return tmp;
 			},
 			showDataList : function() {
@@ -358,54 +437,150 @@
 				var range = (pageC.currentPage - 1) * pageC.showRecord
 				tmp = tmp.slice(range, range + pageC.showRecord - 1)
 				return tmp;
-			}
+			},
+			checkedData : function() {
+				var tmp = $.map(this.showDataList, function(val, key) {
+					if (val.checked)
+						return val
+				})
+				return tmp;
+			},
 		},
 		mounted : function() {
-
+			this.updPageControl();
 		},
 		methods : {
+			delData : function(id) {
+				this.list = $.map(this.list, function(val, key) {
+					if (val.Item != id)
+						return val;
+				})
+			},
+			updPageControl : function() {
+				var pageC = pageControl;
+				pageC.currentPage = 1;
+				pageC.totalRecord = this.showData.length;
+				pageC.pageCounts = Math.ceil((pageC.totalRecord / pageC.showRecord));
+			}
 		},
 	})
 	var modalControl = new Vue({
 		el : '#modal-control',
 		name : 'ModalControl',
 		data : {
-			editModal : {
+			list : {
+				dataList : [ {
+
+				} ],
+				template : {
+					ConsumerId : '',
+
+				},
+			},
+			edit : {
 				data : {},
 			},
-			addModal : {
-				data : {
-					Id : '',
-					Name : '',
-					Remark : '',
-					Mobile : '',
-				},
+			selectCount : 0,
+		},
+		computed : {
+			consumerList : function() {
+				var tmp = $.map(toolControl.consumers, function(v, key) {
+					return {
+						label : v.Id + ' - ' + v.Name,
+						val : v.Id,
+					}
+				})
+				return tmp;
+			},
+			reserveList : function() {
+				var tmp = $.map(toolControl.reserve, function(v, key) {
+					return {
+						label : v.Id + ' - ' + v.Name,
+						val : v.Id,
+					}
+				})
+				return tmp;
+			},
+			totalQty : function() {
+				var tmp = {
+					D : 0,
+					S : 0,
+				}
+				$.each(this.list.dataList, function(idx, val) {
+					var temp = isNaN(parseFloat(val.Qty)) ? 0 : parseFloat(val.Qty);
+					if (val.ConsumerId) {
+						var status = toolControl.consumerMap[val.ConsumerId].Status;
+						tmp[status] += temp;
+					}
+				})
+				tmp = {
+					I : isNaN(tmp.D.toFixed(0)) ? 0 : tmp.D.toFixed(0),
+					O : isNaN(tmp.S.toFixed(0)) ? 0 : tmp.S.toFixed(0),
+				}
+				return tmp
+			},
+			totalPrice : function() {
+				var tmp = {
+					D : 0,
+					S : 0,
+				}
+				$.each(this.list.dataList, function(idx, val) {
+					var tempQty = isNaN(parseFloat(val.Qty)) ? 0 : parseFloat(val.Qty);
+					var tempPrice = isNaN(parseFloat(val.Price)) ? 0 : parseFloat(val.Price);
+
+					if (val.ConsumerId) {
+						var status = toolControl.consumerMap[val.ConsumerId].Status;
+						tmp[status] += tempPrice * tempQty;
+					}
+
+				})
+				tmp = {
+					I : isNaN(tmp.D.toFixed(0)) ? 0 : tmp.D.toFixed(0),
+					O : isNaN(tmp.S.toFixed(0)) ? 0 : tmp.S.toFixed(0),
+				}
+				return tmp
 			}
 		},
-		computed : {},
+		updated : function() {
+			if ($('.selectpicker').length != this.selectCount) {
+				$('.selectpicker').selectpicker('refresh');
+				this.selectCount = $('.selectpicker').length
+			}
+		},
 		mounted : function() {
+			var vm = this;
+			$('#listModal').on('show.bs.modal', function(e) {
+				$('.selectpicker').selectpicker('refresh');
+			})
+			$('#listModal').on('hidden.bs.modal', function(e) {
+				vm.list.dataList = [ Object.assign({}, vm.list.template) ]
+			})
 		},
 		methods : {
-			editModalSubmit : function(e) {
-				e.preventDefault();
-				var vm = this
-				g.ajax("maintainConsumer", {
-					edit : vm.editModal.data
-				}, {
-					btn : $(e.target).find('button[type=submit]'),
-					func : {
-						success : function(res) {
-							dataControl.updData(vm.editModal.data);
-							$('#editModal').modal('toggle')
-						}
-					}
-				});
+			consumerListOnChange : function(idx) {
+				var tmp = toolControl.consumerMap[this.list.dataList[idx].ConsumerId].Status;
+				this.list.dataList[idx].Status = tmp
+				this.list.dataList[idx].StatusName = toolControl.statusMap[tmp].text
+				this.list.dataList[idx].Color = toolControl.statusMap[tmp].color
 			},
-			addModalSubmit : function(e) {
+			listAddData : function(idx) {
+				var tmp = Object.assign({}, this.list.template)
+				this.list.dataList.splice((idx + 1), 0, Object.assign(tmp, {
+					SellDate : this.list.dataList[idx].SellDate,
+					ConsumerId : this.list.dataList[idx].ConsumerId,
+					Color : this.list.dataList[idx].Color,
+					StatusName : this.list.dataList[idx].StatusName,
+					Status : this.list.dataList[idx].Status,
+				}))
+			},
+			listDelData : function(idx) {
+				this.list.dataList.splice(idx, 1)
+			},
+			listSubmit : function(e) {
 				e.preventDefault();
 				var vm = this
-				g.ajax("maintainConsumer", {
-					add : vm.addModal.data
+				g.ajax("transactionGoods", {
+					list : vm.list.dataList
 				}, {
 					btn : $(e.target).find('button[type=submit]'),
 					func : {

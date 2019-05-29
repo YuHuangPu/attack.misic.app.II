@@ -83,7 +83,7 @@ public class maintainGoods extends HttpServlet {
 		} else if (reqJson.has("edit")) {
 			reqJson = reqJson.getJSONObject("edit");
 
-			String sql = "UPDATE `GOODS` SET " + "`NAME` = ?, " + "`RESERVE` = ?, " + "`COST` = ?, " + "`PRICE` = ?, " + "`FACTORY_ID` = ?, " + "`REMARK` = ?, " + "`UPDATE_DATE` = ?, "
+			String sql = "UPDATE `GOODS` SET " + "`NAME` = ?, " + "`RESERVE` = ?, " + "`COST` = ?, " + "`PRICE` = ?, " + "`FACTORY` = ?, " + "`REMARK` = ?, " + "`UPDATE_DATE` = ?, "
 					+ "`UPDATE_WHO` = ? " + "WHERE `GOODS`.`ID` = ?;";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, reqJson.getString("Name"));
@@ -110,7 +110,7 @@ public class maintainGoods extends HttpServlet {
 	}
 
 	private void addGoods(JSONObject reqJson, Connection conn, PreparedStatement pstmt, java.sql.Timestamp CreateDate, String userID) throws SQLException, JSONException, ParseException {
-		String sql = "INSERT INTO `GOODS` (`ITEM`, `ID`, `NAME`, `STATUS`, `RESERVE`, `PURCHASE`, `SELL`, `COST`, `PRICE`, `FACTORY_ID`, `REMARK`, `CREATE_DATE`, `UPDATE_DATE`, `CREATE_WHO`, `UPDATE_WHO`) "
+		String sql = "INSERT INTO `GOODS` (`ITEM`, `ID`, `NAME`, `STATUS`, `RESERVE`, `PURCHASE`, `SELL`, `COST`, `PRICE`, `FACTORY`, `REMARK`, `CREATE_DATE`, `UPDATE_DATE`, `CREATE_WHO`, `UPDATE_WHO`) "
 				+ "VALUES ('0', ?, ?, 'S', ?, '0', '0', ?, ?, ?, ?, ?, ?, ?, ?);";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, StringUtil.eliminateNull(reqJson.getString("Id"), "0"));

@@ -31,13 +31,14 @@ public class transactionPageManager extends com.ama.common.BaseManager {
 	public String execute() throws ParseException {
 		HttpServletRequest request;
 		try {
-			String whereCondition = "AND SELL_DATE BETWEEN ? AND ? AND CONSUMER_ID = ?";
-			Timestamp[] dateRange = new Timestamp[2];
+			String whereCondition = null;
+//			String whereCondition = "AND SELL_DATE BETWEEN ? AND ? AND CONSUMER_ID = ?";
+//			Timestamp[] dateRange = new Timestamp[2];
 //			dateRange[0] = DatesUtil.getFirstDayByMonth(new Date());
-			dateRange[0] = DatesUtil.StringToTimestamp("2019-01-01", DatesUtil.DateFormat);
-			dateRange[1] = DatesUtil.getLastDayByMonth(new Date());
-			JSONArray consumers = new JSONArray();
-			consumers.put("001");
+//			dateRange[0] = DatesUtil.StringToTimestamp("2019-01-01", DatesUtil.DateFormat);
+//			dateRange[1] = DatesUtil.getLastDayByMonth(new Date());
+//			JSONArray consumers = new JSONArray();
+//			consumers.put("001");
 
 			request = (HttpServletRequest) ServletActionContext.getRequest();
 			this.setConn(com.util.DataBaseUtil.getConnection(Keys.COMPANY_JNDI_NAME, Boolean.TRUE));
@@ -48,28 +49,29 @@ public class transactionPageManager extends com.ama.common.BaseManager {
 			pageVo.setCurrentPage(goPage);
 
 			Views vw = new Views(SqlFactory.countSql(SqlFactory.getGoodsDetailInfo(whereCondition)), this.getConn());
-			vw.setPstmt(new Object[] {dateRange[0], dateRange[1], consumers.getString(0)});
+//			vw.setPstmt(new Object[] {dateRange[0], dateRange[1], consumers.getString(0)});
 			JSONArray countSql = vw.getDatalistJSONArray(Boolean.FALSE);
 			pageVo.setTotalRecord(countSql.getJSONObject(0).getInt("RowCount"));
 
 			vw = new Views(SqlFactory.getGoodsDetailInfo(whereCondition), this.getConn());
-			vw.setPstmt(new Object[] {dateRange[0], dateRange[1], consumers.getString(0)});
+//			vw.setPstmt(new Object[] {dateRange[0], dateRange[1], consumers.getString(0)});
 			JSONArray dataList = vw.getDatalistJSONArray(Boolean.FALSE);
+//			JSONArray dataList = new JSONArray();
 
 			vw = new Views(SqlFactory.getConsumerInfo(null), this.getConn());
-			JSONArray consumerList = vw.getDatalistJSONArray(Boolean.FALSE);
+			JSONArray consumers = vw.getDatalistJSONArray(Boolean.FALSE);
 
-			Views maxUpdate = new Views(this.getConn(), Keys.View.ConsumerMaxUpdate);
-			JSONArray mUpdate = maxUpdate.getDatalistJSONArray(Boolean.FALSE);
+			vw = new Views(SqlFactory.getReserveInfo(null), this.getConn());
+			JSONArray reserve = vw.getDatalistJSONArray(Boolean.FALSE);
 
-			JSONArray dateRangeStr = new JSONArray();
-			dateRangeStr.put(DatesUtil.DateFormat.format(dateRange[0]));
-			dateRangeStr.put(DatesUtil.DateFormat.format(dateRange[1]));
-			request.setAttribute("dateRange", dateRangeStr);
+//			JSONArray dateRangeStr = new JSONArray();
+//			dateRangeStr.put(DatesUtil.DateFormat.format(dateRange[0]));
+//			dateRangeStr.put(DatesUtil.DateFormat.format(dateRange[1]));
+//			request.setAttribute("dateRange", dateRangeStr);
+//			request.setAttribute("consumers", consumers.toString().replace("\"", "\\\"").replace("'", "\\'"));
 			request.setAttribute("consumers", consumers.toString().replace("\"", "\\\"").replace("'", "\\'"));
-			request.setAttribute("consumerList", consumerList.toString().replace("\"", "\\\"").replace("'", "\\'"));
+			request.setAttribute("reserve", reserve.toString().replace("\"", "\\\"").replace("'", "\\'"));
 			request.setAttribute("dataList", dataList.toString().replace("\"", "\\\"").replace("'", "\\'"));
-			request.setAttribute("MaxUpdate", mUpdate.getJSONObject(0).getString("MaxUpdate"));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -109,28 +109,23 @@ public class transactionGoods extends HttpServlet {
 			purchaseGoods(reqJson, conn, pstmt, CreateDate, userID);
 		} else if (reqJson.has("SellGoods")) {
 			sellGoods(reqJson, conn, pstmt, CreateDate, userID);
-		} else if (reqJson.has("DelGoodsDetail")) {
-			reqJson = reqJson.getJSONObject("DelGoodsDetail");
-			sql = "UPDATE `GOODS_DETAIL` SET `STATUS` = 'N', `CREATE_WHO`=? WHERE `GOODS_DETAIL`.`ITEM` = ?;";
+		} else if (reqJson.has("del")) {
+			reqJson = reqJson.getJSONObject("del");
+			sql = "DELETE FROM `GOODS_DETAIL` WHERE `GOODS_DETAIL`.`ITEM` = ?;";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, userID);
-			pstmt.setString(2, reqJson.getString("GoodsDetailId"));
+			pstmt.setString(1, reqJson.getString("Id"));
 			pstmt.execute();
-		} else if (reqJson.has("DayList")) {
-			reqJson = (reqJson.getJSONObject("DayList"));
-			Iterator<Object> itrs = reqJson.getJSONArray("DayList").iterator();
+		} else if (reqJson.has("list")) {
+//			reqJson = (reqJson.getJSONObject("DayList"));
+			Iterator<Object> itrs = reqJson.getJSONArray("list").iterator();
 			while (itrs.hasNext()) {
 				JSONObject goods = (JSONObject) itrs.next();
-				if ("x".equals(goods.getString("GoodsRemark"))) {
-					continue;
-				}
-				goods.put("IDate", reqJson.getString("DayIDate"));
-				if (reqJson.getString("DayConsumerId").equals("D")) {
-					goods.put("ConsumerId", "0");
-					goods.put("GoodsCost", goods.getString("GoodsPrice"));
+				String status = goods.getString("Status");
+				goods.put("Status", status);
+				if (status.equals("D")) {
+					goods.put("Cost", goods.getString("Price"));
 					purchaseGoods(new JSONObject().put("OldGoods", goods), conn, pstmt, CreateDate, userID);
 				} else {
-					goods.put("ConsumerId", reqJson.getString("DayConsumerId"));
 					sellGoods(new JSONObject().put("SellGoods", goods), conn, pstmt, CreateDate, userID);
 				}
 			}
@@ -146,17 +141,17 @@ public class transactionGoods extends HttpServlet {
 				// `PRICE` = (`PRICE` * `RESERVE` + ? )/(`RESERVE` + ?), "
 				+ "`REMARK` = ?, `UPDATE_DATE` = ?, `UPDATE_WHO` = ?, `PURCHASE` = `PURCHASE` + ?" + "WHERE `GOODS`.`ID` = ?;";
 		pstmt = conn.prepareStatement(sql);
-		 pstmt.setBigDecimal(1, reqJson.getBigDecimal("GoodsCost").multiply(reqJson.getBigDecimal("GoodsAmount")));
-		 pstmt.setString(2, reqJson.getString("GoodsAmount"));
-		 pstmt.setString(3, reqJson.getString("GoodsAmount"));
+		 pstmt.setBigDecimal(1, reqJson.getBigDecimal("Cost").multiply(reqJson.getBigDecimal("Qty")));
+		 pstmt.setString(2, reqJson.getString("Qty"));
+		 pstmt.setString(3, reqJson.getString("Qty"));
 		// pstmt.setBigDecimal(4,
 		// reqJson.getBigDecimal("GoodsPrice").multiply(reqJson.getBigDecimal("GoodsAmount")));
 		// pstmt.setString(5, reqJson.getString("GoodsAmount"));
 
-		pstmt.setString(4, reqJson.getString("GoodsRemark"));
+		pstmt.setString(4, reqJson.getString("Remark"));
 		pstmt.setTimestamp(5, CreateDate);
 		pstmt.setString(6, userID);
-		pstmt.setString(7, reqJson.getString("GoodsAmount"));
+		pstmt.setString(7, reqJson.getString("Qty"));
 		pstmt.setString(8, reqJson.getString("GoodsId"));
 		pstmt.execute();
 
@@ -164,10 +159,10 @@ public class transactionGoods extends HttpServlet {
 				+ "VALUES ('0', ?, '0', 'I', ?, ?, ?, ?, ?, ?);";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, reqJson.getString("GoodsId"));
-		pstmt.setString(2, reqJson.getString("GoodsAmount"));
-		pstmt.setBigDecimal(3, reqJson.getBigDecimal("GoodsCost").multiply(reqJson.getBigDecimal("GoodsAmount")));
-		pstmt.setDate(4, new java.sql.Date(com.util.DatesUtil.getValue(reqJson.getString("IDate"), com.util.DatesUtil.DateFormat).getTime()));
-		pstmt.setString(5, reqJson.getString("GoodsRemark"));
+		pstmt.setString(2, reqJson.getString("Qty"));
+		pstmt.setBigDecimal(3, reqJson.getBigDecimal("Cost").multiply(reqJson.getBigDecimal("Qty")));
+		pstmt.setDate(4, new java.sql.Date(com.util.DatesUtil.getValue(reqJson.getString("SellDate"), com.util.DatesUtil.DateFormat).getTime()));
+		pstmt.setString(5, reqJson.getString("Remark"));
 		pstmt.setTimestamp(6, CreateDate);
 		pstmt.setString(7, userID);
 		pstmt.execute();
@@ -180,10 +175,10 @@ public class transactionGoods extends HttpServlet {
 				// + "`PRICE` = ?, "
 				+ "`SELL` = `SELL` + ?, " + "`REMARK` = ?, `UPDATE_DATE` = ?, `UPDATE_WHO` = ? " + "WHERE `GOODS`.`ID` = ?;";
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, reqJson.getString("GoodsAmount"));
+		pstmt.setString(1, reqJson.getString("Qty"));
 		// pstmt.setString(2, reqJson.getString("GoodsPrice"));
-		pstmt.setString(2, reqJson.getString("GoodsAmount"));
-		pstmt.setString(3, reqJson.getString("GoodsRemark"));
+		pstmt.setString(2, reqJson.getString("Qty"));
+		pstmt.setString(3, reqJson.getString("Remark"));
 		pstmt.setTimestamp(4, CreateDate);
 		pstmt.setString(5, userID);
 		pstmt.setString(6, reqJson.getString("GoodsId"));
@@ -195,10 +190,10 @@ public class transactionGoods extends HttpServlet {
 		pstmt.setString(1, reqJson.getString("GoodsId"));
 		pstmt.setString(2, reqJson.getString("ConsumerId"));
 		pstmt.setString(3, "O");
-		pstmt.setString(4, reqJson.getString("GoodsAmount"));
-		pstmt.setBigDecimal(5, reqJson.getBigDecimal("GoodsAmount").multiply(reqJson.getBigDecimal("GoodsPrice")));
-		pstmt.setDate(6, new java.sql.Date(com.util.DatesUtil.getValue(reqJson.getString("IDate"), com.util.DatesUtil.DateFormat).getTime()));
-		pstmt.setString(7, reqJson.getString("GoodsRemark"));
+		pstmt.setString(4, reqJson.getString("Qty"));
+		pstmt.setBigDecimal(5, reqJson.getBigDecimal("Qty").multiply(reqJson.getBigDecimal("Price")));
+		pstmt.setDate(6, new java.sql.Date(com.util.DatesUtil.getValue(reqJson.getString("SellDate"), com.util.DatesUtil.DateFormat).getTime()));
+		pstmt.setString(7, reqJson.getString("Remark"));
 		pstmt.setTimestamp(8, CreateDate);
 		pstmt.setString(9, userID);
 		pstmt.execute();
